@@ -31,12 +31,12 @@ function PerformanceBars({ product }) {
   );
 }
 
-function AtmosphereTile({ product, title, tone }) {
+function AtmosphereTile({ product, title, tone, className = '' }) {
   const isSolar = product.world === 'solar';
 
   return (
     <div
-      className={`relative min-h-[260px] overflow-hidden ${
+      className={`relative min-h-[260px] overflow-hidden ${className} ${
         isSolar
           ? 'bg-[radial-gradient(circle_at_65%_25%,rgba(255,193,89,0.26),transparent_16rem),linear-gradient(135deg,#120804,#4b2108,#080503)]'
           : 'bg-[radial-gradient(circle_at_38%_24%,rgba(142,14,29,0.26),transparent_16rem),linear-gradient(135deg,#030202,#25060a,#050403)]'
@@ -52,16 +52,64 @@ function AtmosphereTile({ product, title, tone }) {
   );
 }
 
+function GalleryScene({ product, item }) {
+  if (item.kind === 'visual') {
+    return <ProductVisual product={product} priority={item.id === 'main'} className="absolute inset-0" />;
+  }
+
+  if (item.kind === 'image') {
+    return (
+      <div className="absolute inset-0 overflow-hidden bg-ink">
+        <Image
+          src={product.image}
+          alt={item.alt}
+          fill
+          sizes="(min-width: 1024px) 56vw, 100vw"
+          className="object-cover"
+          priority={false}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.44))]" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="absolute inset-0">
+      <AtmosphereTile product={product} title={item.title} tone={item.tone} className="h-full min-h-full" />
+    </div>
+  );
+}
+
 export default function ProductDetailPage({ slug }) {
   const product = getProduct(slug);
   const [size, setSize] = useState('50 ml');
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [activeGallery, setActiveGallery] = useState('main');
   const { addToCart } = useCart();
 
   if (!product) notFound();
 
   const selectedPrice = getSizePrice(product, size);
+  const gallery = [
+    { id: 'main', label: 'Main Image', kind: 'visual' },
+    { id: 'detail', label: 'Detail', kind: 'image', alt: `${product.name} bottle detail` },
+    {
+      id: 'packaging',
+      label: 'Packaging',
+      kind: 'atmosphere',
+      title: 'Packaging',
+      tone: 'Black carton, champagne seal, weight in the hand.',
+    },
+    {
+      id: 'lifestyle',
+      label: 'Lifestyle',
+      kind: 'atmosphere',
+      title: product.world === 'solar' ? 'Golden hour' : 'After dark',
+      tone: product.world === 'solar' ? 'Warm fruit, cream and amber in soft focus.' : 'Cherry, smoke and velvet against cold air.',
+    },
+  ];
+  const activeItem = gallery.find((item) => item.id === activeGallery) || gallery[0];
 
   function handleAdd() {
     addToCart(product.id, { size, quantity: Number(quantity) });
@@ -74,21 +122,30 @@ export default function ProductDetailPage({ slug }) {
       <section className="lux-container grid gap-12 pb-24 pt-32 lg:grid-cols-[1.08fr_0.92fr] lg:pt-40">
         <motion.div variants={revealSlow} initial="hidden" animate="visible" className="grid gap-5">
           <div className="relative min-h-[72vh] overflow-hidden">
-            <ProductVisual product={product} priority className="absolute inset-0" />
+            <GalleryScene product={product} item={activeItem} />
           </div>
-          <div className="grid gap-5 sm:grid-cols-3">
-            <div className="relative min-h-[260px] overflow-hidden">
-              <Image
-                src={product.image}
-                alt={`${product.name} bottle detail`}
-                fill
-                sizes="(min-width: 1024px) 22vw, 100vw"
-                className="object-cover transition-transform duration-[1400ms] ease-luxury hover:scale-[1.025]"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.5))]" />
-            </div>
-            <AtmosphereTile product={product} title="Packaging" tone="Black carton, champagne seal, weight in the hand." />
-            <AtmosphereTile product={product} title="On skin" tone={product.world === 'solar' ? 'Warm fruit, cream and amber in soft focus.' : 'Cherry, smoke and velvet against cold air.'} />
+          <div className="grid gap-3 sm:grid-cols-4">
+            {gallery.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`relative min-h-[132px] overflow-hidden text-left transition-opacity duration-500 ease-luxury ${
+                  activeGallery === item.id ? 'opacity-100' : 'opacity-60 hover:opacity-90'
+                }`}
+                onClick={() => setActiveGallery(item.id)}
+              >
+                {item.kind === 'visual' ? (
+                  <ProductVisual product={product} className="absolute inset-0 bg-transparent" />
+                ) : item.kind === 'image' ? (
+                  <Image src={product.image} alt={item.alt} fill sizes="25vw" className="object-cover" />
+                ) : (
+                  <AtmosphereTile product={product} title={item.title} tone={item.tone} />
+                )}
+                <span className="absolute bottom-3 left-3 text-[0.62rem] font-semibold uppercase tracking-luxury text-porcelain">
+                  {item.label}
+                </span>
+              </button>
+            ))}
           </div>
         </motion.div>
 

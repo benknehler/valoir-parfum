@@ -1,15 +1,15 @@
 # Valoir Parfum
 
-Moderne Luxus-Parfum-Shop-Website für die Marke Valoir Parfum.
+International luxury-fragrance campaign site with commerce-ready product flows for Valoir Parfum.
 
-## Seiten
+## Experience
 
-- Landingpage
-- Über uns
-- Shop
-- Produktdetailseiten
-- Warenkorb mit lokaler Grundlogik
-- Newsletter-Anmeldung
+- Cinematic campaign landing page
+- Maison page
+- Two-product collection shop
+- Premium product detail pages
+- Cart drawer with local commerce logic
+- Private-list capture
 
 ## Stack
 

@@ -2,222 +2,153 @@
 
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import NewsletterForm from './NewsletterForm.jsx';
 import ProductVisual from './ProductVisual.jsx';
 import MotionSection from './MotionSection.jsx';
-import NewsletterForm from './NewsletterForm.jsx';
-import ServiceStrip from './ServiceStrip.jsx';
-import { formatPrice, products } from '../lib/products.js';
+import { products } from '../lib/products.js';
 import { luxuryEase, revealSlow } from '../lib/motion.js';
 
 const [noir, luna] = products;
 
-function AtmospherePanel({ product, align = 'left' }) {
-  const isSolar = product.world === 'solar';
-
+function AccordRail({ product, tone = 'light' }) {
   return (
-    <MotionSection
-      className={`relative min-h-[92vh] overflow-hidden ${
-        isSolar
-          ? 'bg-[radial-gradient(circle_at_72%_18%,rgba(255,192,83,0.28),transparent_24rem),linear-gradient(135deg,#080503_0%,#5a2708_48%,#0a0603_100%)]'
-          : 'bg-[radial-gradient(circle_at_28%_18%,rgba(142,14,29,0.34),transparent_24rem),linear-gradient(135deg,#040303_0%,#31070d_48%,#050403_100%)]'
-      }`}
-      slow
-    >
-      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.08),transparent_34%,rgba(255,255,255,0.035)_61%,transparent)] opacity-70" />
-      <div className="absolute inset-x-[8%] bottom-[9%] h-[22vh] bg-[radial-gradient(ellipse_at_center,rgba(255,248,235,0.2),transparent_62%)] blur-xl" />
-      <div className={`lux-container relative grid min-h-[92vh] items-center gap-12 py-20 lg:grid-cols-[0.95fr_1.05fr] ${align === 'right' ? 'lg:[&>*:first-child]:order-2' : ''}`}>
-        <div className="relative z-10 max-w-2xl">
-          <p className="eyebrow">{product.collection}</p>
-          <h2 className="mt-7 font-serif text-[clamp(4.7rem,9vw,11rem)] leading-[0.76] text-porcelain">
-            {product.name}
-          </h2>
-          <p className="mt-8 max-w-xl text-xl leading-9 text-cream/70 md:text-2xl md:leading-10">
-            {product.campaign}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3">
-            {product.accords.map((accord) => (
-              <span key={accord} className="text-[0.72rem] font-semibold uppercase tracking-luxury text-cream/60">
-                {accord}
-              </span>
-            ))}
-          </div>
-          <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-            <Link className="button-lux button-lux-primary" href={`/product/${product.slug}`}>
-              View Details
-            </Link>
-            <Link className="button-lux" href="/shop">
-              Discover Collection
-            </Link>
-          </div>
-        </div>
-        <div className="relative min-h-[56vh] lg:min-h-[82vh]">
-          <ProductVisual
-            product={product}
-            className="absolute inset-0 bg-transparent"
-            imageClassName={isSolar ? 'drop-shadow-[0_42px_90px_rgba(255,154,49,0.18)]' : 'drop-shadow-[0_42px_90px_rgba(142,14,29,0.22)]'}
-          />
-        </div>
-      </div>
-    </MotionSection>
-  );
-}
-
-function AccordLine({ product }) {
-  return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {product.accords.map((accord, index) => (
-        <motion.div
+    <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      {product.accords.map((accord) => (
+        <span
           key={accord}
-          className="relative min-h-36 overflow-hidden py-7"
-          initial={{ opacity: 0, y: 30, filter: 'blur(16px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, margin: '-12% 0px' }}
-          transition={{ duration: 0.95, delay: index * 0.05, ease: luxuryEase }}
+          className={`border-t pt-4 text-[0.68rem] font-semibold uppercase tracking-luxury ${
+            tone === 'gold' ? 'border-champagne/30 text-champagne/80' : 'border-white/15 text-cream/70'
+          }`}
         >
-          <div className="hairline" />
-          <span className="mt-7 block text-[0.64rem] font-semibold uppercase tracking-luxury text-champagne/50">
-            0{index + 1}
-          </span>
-          <strong className="mt-4 block font-serif text-4xl font-normal leading-none text-porcelain">
-            {accord}
-          </strong>
-        </motion.div>
+          {accord}
+        </span>
       ))}
     </div>
   );
 }
 
+function Atmosphere({ product, side }) {
+  const isSolar = product.world === 'solar';
+
+  return (
+    <motion.article
+      className={`group relative min-h-[78vh] overflow-hidden ${
+        isSolar
+          ? 'bg-[radial-gradient(circle_at_54%_18%,rgba(255,193,89,0.34),transparent_22rem),linear-gradient(145deg,#080503_0%,#632b08_54%,#0b0603_100%)]'
+          : 'bg-[radial-gradient(circle_at_52%_22%,rgba(142,14,29,0.38),transparent_24rem),linear-gradient(145deg,#030202_0%,#36070d_52%,#050403_100%)]'
+      }`}
+      initial={{ opacity: 0, y: 48, filter: 'blur(22px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '-15% 0px' }}
+      transition={{ duration: 1.15, ease: luxuryEase }}
+    >
+      <div className="absolute inset-0 opacity-70 bg-[linear-gradient(112deg,transparent_10%,rgba(255,255,255,0.08)_42%,transparent_56%)]" />
+      <motion.div
+        className={`absolute inset-y-[9%] ${side === 'left' ? 'right-[-12%] left-[22%]' : 'left-[-12%] right-[22%]'}`}
+        whileInView={{ scale: [1.03, 1], y: [26, 0] }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.6, ease: luxuryEase }}
+      >
+        <ProductVisual product={product} className="h-full bg-transparent" />
+      </motion.div>
+      <div className={`absolute inset-0 ${isSolar ? 'bg-[linear-gradient(90deg,rgba(0,0,0,0.62),transparent_58%)]' : 'bg-[linear-gradient(90deg,rgba(0,0,0,0.76),transparent_62%)]'}`} />
+      <div className="relative z-10 flex min-h-[78vh] items-end p-6 sm:p-10 lg:p-14">
+        <div className="max-w-[34rem] pb-6">
+          <p className="eyebrow">{isSolar ? 'Amber light' : 'Black lacquer'}</p>
+          <h2 className="mt-6 font-serif text-[clamp(4.4rem,8vw,9.4rem)] leading-[0.76] text-porcelain">
+            {product.name}
+          </h2>
+          <p className="mt-7 text-xl leading-8 text-cream/70">
+            {isSolar
+              ? 'Sun-warmed fruit, cream and amber held close to skin.'
+              : 'Cherry, rose, smoke and velvet pressed into shadow.'}
+          </p>
+          <AccordRail product={product} tone={isSolar ? 'gold' : 'light'} />
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+function EditorialFragrance({ product, reverse = false }) {
+  const isSolar = product.world === 'solar';
+
+  return (
+    <section
+      className={`relative min-h-dvh overflow-hidden ${
+        isSolar
+          ? 'bg-[radial-gradient(circle_at_76%_16%,rgba(255,201,105,0.26),transparent_30rem),linear-gradient(180deg,#090603_0%,#3f1b06_48%,#070403_100%)]'
+          : 'bg-[radial-gradient(circle_at_26%_18%,rgba(142,14,29,0.25),transparent_30rem),linear-gradient(180deg,#030202_0%,#1d0407_48%,#030202_100%)]'
+      }`}
+    >
+      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.06),transparent_35%,rgba(255,255,255,0.04)_62%,transparent)]" />
+      <div className="relative grid min-h-dvh items-center gap-10 px-5 py-24 sm:px-8 lg:grid-cols-2 lg:px-12">
+        <MotionSection className={`relative min-h-[58vh] lg:min-h-[82vh] ${reverse ? 'lg:order-2' : ''}`} slow>
+          <ProductVisual product={product} className="absolute inset-0 bg-transparent" />
+        </MotionSection>
+        <MotionSection className="relative z-10 max-w-2xl lg:px-10" slow>
+          <p className="eyebrow">{product.world === 'solar' ? 'Golden heat' : 'Dark cherry'}</p>
+          <h2 className="mt-7 font-serif text-[clamp(4.2rem,8vw,9.6rem)] leading-[0.78] text-porcelain">
+            {product.world === 'solar' ? 'Heat, softened.' : 'Smoke, polished.'}
+          </h2>
+          <p className="mt-8 text-2xl leading-10 text-cream/70">{product.campaign}</p>
+          <AccordRail product={product} tone={isSolar ? 'gold' : 'light'} />
+          <Link className="button-lux button-lux-primary mt-12" href={`/product/${product.slug}`}>
+            Explore {product.name}
+          </Link>
+        </MotionSection>
+      </div>
+    </section>
+  );
+}
+
 export default function HomePage() {
   const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.28], [0, 110]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.28], [1, 1.07]);
-  const copyY = useTransform(scrollYProgress, [0, 0.22], [0, -28]);
+  const heroY = useTransform(scrollYProgress, [0, 0.28], [0, 120]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.28], [1.02, 1.12]);
+  const copyY = useTransform(scrollYProgress, [0, 0.2], [0, -34]);
 
   return (
     <>
-      <section className="relative min-h-dvh overflow-hidden bg-[#030202]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(142,14,29,0.26),transparent_31rem),radial-gradient(circle_at_76%_30%,rgba(194,106,27,0.2),transparent_29rem),linear-gradient(180deg,#020101_0%,#080403_54%,#030202_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,0.07)_43%,transparent_53%),linear-gradient(245deg,transparent_14%,rgba(255,255,255,0.04)_46%,transparent_64%)] opacity-70" />
-        <div className="absolute inset-x-0 bottom-0 h-[32vh] bg-[radial-gradient(ellipse_at_center,rgba(255,248,235,0.18),transparent_58%),linear-gradient(180deg,transparent,rgba(0,0,0,0.94))]" />
+      <section className="relative min-h-dvh overflow-hidden bg-[#020101]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(142,14,29,0.28),transparent_31rem),radial-gradient(circle_at_76%_42%,rgba(194,106,27,0.2),transparent_32rem)]" />
         <motion.div className="absolute inset-0" style={{ y: heroY, scale: heroScale }}>
-          <ProductVisual product={noir} priority className="h-full bg-transparent" />
+          <ProductVisual product={noir} priority className="h-full bg-transparent" imageClassName="object-[52%_42%]" />
         </motion.div>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9),rgba(0,0,0,0.36)_45%,rgba(0,0,0,0.78)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.92),rgba(0,0,0,0.34)_47%,rgba(0,0,0,0.78)),linear-gradient(180deg,rgba(0,0,0,0.14),transparent_48%,rgba(0,0,0,0.9))]" />
+        <div className="absolute inset-x-[10%] bottom-[4vh] h-[24vh] bg-[radial-gradient(ellipse_at_center,rgba(255,248,235,0.18),transparent_62%)] blur-2xl" />
 
-        <div className="lux-container relative z-10 flex min-h-dvh items-end pb-[11vh] pt-28">
+        <div className="relative z-10 flex min-h-dvh items-end px-5 pb-[10vh] pt-28 sm:px-8 lg:px-12">
           <motion.div className="max-w-5xl" style={{ y: copyY }} variants={revealSlow} initial="hidden" animate="visible">
-            <p className="eyebrow">Valoir Parfum</p>
-            <h1 className="mt-8 font-serif text-[clamp(5.4rem,15vw,15rem)] font-semibold leading-[0.72] text-porcelain">
+            <h1 className="font-serif text-[clamp(5.6rem,15vw,16rem)] font-semibold leading-[0.7] text-porcelain">
               VALOIR
             </h1>
-            <p className="mt-8 max-w-2xl text-2xl leading-9 text-cream/75 md:text-4xl md:leading-[1.15]">
+            <p className="mt-8 max-w-2xl text-2xl leading-9 text-cream/75 md:text-4xl md:leading-[1.14]">
               Dark cherry. Golden heat. A signature that stays.
             </p>
             <div className="mt-11 flex flex-col gap-4 sm:flex-row">
               <Link className="button-lux button-lux-primary" href="/shop">
                 Discover the Collection
               </Link>
-              <Link className="button-lux" href="#scent-dna">
-                Explore the Scent DNA
+              <Link className="button-lux" href="#dna">
+                Explore the DNA
               </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
-      <ServiceStrip />
-
-      <section id="collection" className="section-space lux-container">
-        <MotionSection className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr]" slow>
-          <div>
-            <h2 className="section-title">Two fragrances. Two atmospheres.</h2>
-          </div>
-          <div className="max-w-2xl lg:pt-6">
-            <p className="body-lux">
-              Valoir begins with contrast: one fragrance in lacquered shadow, one in amber light.
-              Both are built to leave a trace before the room names it.
-            </p>
-          </div>
-        </MotionSection>
+      <section id="dna" className="grid lg:grid-cols-2">
+        <Atmosphere product={noir} side="left" />
+        <Atmosphere product={luna} side="right" />
       </section>
 
-      <section className="grid">
-        <AtmospherePanel product={noir} />
-        <AtmospherePanel product={luna} align="right" />
-      </section>
+      <EditorialFragrance product={noir} />
+      <EditorialFragrance product={luna} reverse />
 
-      <section id="scent-dna" className="relative overflow-hidden py-28 sm:py-36 lg:py-44">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_30%,rgba(142,14,29,0.18),transparent_28rem),radial-gradient(circle_at_86%_62%,rgba(194,106,27,0.18),transparent_30rem)]" />
-        <div className="lux-container relative">
-          <MotionSection className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]" slow>
-            <div>
-              <h2 className="section-title">Built in shadow and light.</h2>
-            </div>
-            <div className="space-y-12">
-              <div>
-                <p className="max-w-2xl text-xl leading-9 text-cream/70">
-                  Noir Cerice and Luna Solea share a Valoir structure: a vivid opening, a textured
-                  heart, a base that stays warm after the first impression fades.
-                </p>
-              </div>
-              <div>
-                <p className="mb-7 text-[0.68rem] font-semibold uppercase tracking-luxury text-ruby/80">
-                  Noir Cerice
-                </p>
-                <AccordLine product={noir} />
-              </div>
-              <div>
-                <p className="mb-7 text-[0.68rem] font-semibold uppercase tracking-luxury text-amber/90">
-                  Luna Solea
-                </p>
-                <AccordLine product={luna} />
-              </div>
-            </div>
-          </MotionSection>
-        </div>
-      </section>
-
-      <section className="section-space relative overflow-hidden">
-        <div className="absolute left-1/2 top-0 h-full w-px bg-gradient-to-b from-transparent via-champagne/20 to-transparent" />
-        <div className="lux-container relative grid gap-16 lg:grid-cols-[1.05fr_0.95fr]">
-          <MotionSection className="min-h-[70vh]" slow>
-            <ProductVisual product={noir} className="h-full min-h-[620px] bg-transparent" />
-          </MotionSection>
-          <MotionSection className="flex items-center" slow>
-            <div>
-              <h2 className="font-serif text-[clamp(4rem,8vw,9rem)] leading-[0.78] text-porcelain">
-                The ritual of presence.
-              </h2>
-              <p className="body-lux mt-9 max-w-xl">
-                A Valoir fragrance is not decoration. It is the last thing applied and the first
-                thing remembered: fruit darkened by smoke, fruit warmed by sun, both composed with
-                restraint.
-              </p>
-              <div className="mt-12 grid gap-7 sm:grid-cols-2">
-                {products.map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/product/${product.slug}`}
-                    className="group block py-6"
-                  >
-                    <div className="hairline" />
-                    <span className="mt-6 block text-[0.68rem] font-semibold uppercase tracking-luxury text-cream/50">
-                      {product.family.join(' / ')}
-                    </span>
-                    <strong className="mt-4 block font-serif text-4xl font-normal leading-none text-porcelain transition-colors duration-500 group-hover:text-champagne">
-                      {product.name}
-                    </strong>
-                    <span className="mt-5 block text-sm text-champagne">{formatPrice(product.price)}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </MotionSection>
-        </div>
-      </section>
-
-      <section id="newsletter" className="section-space lux-container">
-        <MotionSection className="mx-auto max-w-5xl" slow>
+      <section id="newsletter" className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12 lg:py-40">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(142,14,29,0.18),transparent_30rem),radial-gradient(circle_at_82%_30%,rgba(215,188,133,0.13),transparent_30rem)]" />
+        <MotionSection className="relative mx-auto max-w-5xl" slow>
           <NewsletterForm />
         </MotionSection>
       </section>
