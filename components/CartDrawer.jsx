@@ -13,11 +13,12 @@ import { luxuryEase } from '../lib/motion.js';
 export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, cartItems, subtotal, updateQuantity, removeItem } = useCart();
   const pathname = usePathname();
+  const normalizedPathname = pathname !== '/' ? pathname.replace(/\/$/, '') : pathname;
   const isDtcExperience =
-    pathname === '/neu' ||
-    pathname === '/kollektion' ||
-    pathname === '/ueber-uns' ||
-    pathname.startsWith('/produkt/');
+    normalizedPathname === '/neu' ||
+    normalizedPathname === '/kollektion' ||
+    normalizedPathname === '/ueber-uns' ||
+    normalizedPathname.startsWith('/produkt/');
   const collectionHref = isDtcExperience ? '/kollektion' : '/shop';
 
   return (
