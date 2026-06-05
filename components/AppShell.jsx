@@ -17,6 +17,11 @@ export default function AppShell({ children }) {
     normalizedPathname === '/kollektion' ||
     normalizedPathname === '/ueber-uns' ||
     normalizedPathname.startsWith('/produkt/');
+  const isAdminExperience = normalizedPathname.startsWith('/admin') || normalizedPathname.startsWith('/konto');
+
+  if (isAdminExperience) {
+    return children;
+  }
 
   return (
     <CartProvider>
