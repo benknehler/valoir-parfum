@@ -9,9 +9,13 @@ import { useCart } from './CartContext.jsx';
 import QuantityControl from './QuantityControl.jsx';
 import { formatPrice } from '../lib/products.js';
 import { luxuryEase } from '../lib/motion.js';
+import { createStripeCheckoutSession } from '../lib/stripe/checkout.ts';
+import { useState } from 'react';
 
 export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, cartItems, subtotal, updateQuantity, removeItem } = useCart();
+  const [checkoutError, setCheckoutError] = useState('');
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const pathname = usePathname();
   const normalizedPathname = pathname !== '/' ? pathname.replace(/\/$/, '') : pathname;
   const isDtcExperience =
@@ -20,6 +24,25 @@ export default function CartDrawer() {
     normalizedPathname === '/ueber-uns' ||
     normalizedPathname.startsWith('/produkt/');
   const collectionHref = isDtcExperience ? '/kollektion' : '/shop';
+
+  async function handleCheckout() {
+    setCheckoutError('');
+    setIsCheckingOut(true);
+
+    try {
+      const checkoutUrl = await createStripeCheckoutSession(
+        cartItems.map((item) => ({
+          id: item.product.id,
+          size: item.size,
+          quantity: item.quantity,
+        }))
+      );
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : 'Stripe Checkout konnte nicht gestartet werden.');
+      setIsCheckingOut(false);
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -115,8 +138,18 @@ export default function CartDrawer() {
                 <span>Zwischensumme</span>
                 <strong className="text-lg tracking-normal text-charcoal">{formatPrice(subtotal)}</strong>
               </div>
-              <button className="button-lux button-lux-primary mt-6 w-full" type="button">
-                Zur Kasse
+              {checkoutError && (
+                <p className="mt-4 rounded-2xl bg-cherry/10 px-4 py-3 text-sm leading-6 text-cherry">
+                  {checkoutError}
+                </p>
+              )}
+              <button
+                className="button-lux button-lux-primary mt-6 w-full"
+                type="button"
+                disabled={cartItems.length === 0 || isCheckingOut}
+                onClick={handleCheckout}
+              >
+                {isCheckingOut ? 'Weiterleitung...' : 'Zur Kasse'}
               </button>
               <p className="mt-4 text-center text-xs leading-5 text-charcoal/40">
                 Steuern und Versand werden beim Bezahlen berechnet.
