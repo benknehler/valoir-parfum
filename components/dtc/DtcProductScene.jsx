@@ -12,10 +12,11 @@ export default function DtcProductScene({
   imageClassName = '',
 }) {
   const isSolar = product.world === 'solar';
+  const hasPositionClass = /\b(absolute|relative|fixed|sticky)\b/.test(className);
 
   return (
     <motion.div
-      className={`group relative overflow-hidden rounded-[2.4rem] bg-pearl shadow-[0_28px_90px_rgba(68,46,24,0.11)] ${className}`}
+      className={`group ${hasPositionClass ? '' : 'relative'} overflow-hidden rounded-[2.4rem] bg-pearl shadow-[0_28px_90px_rgba(68,46,24,0.11)] ${className}`}
       whileHover={{ scale: 1.006 }}
       transition={{ duration: 1.2, ease: luxuryEase }}
     >
