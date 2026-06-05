@@ -6,6 +6,7 @@ import ProductVisual from './ProductVisual.jsx';
 import { products } from '../lib/products.js';
 import { revealSlow } from '../lib/motion.js';
 import { motion } from 'framer-motion';
+import { assetPath } from '../lib/assets.js';
 
 const values = [
   ['Elegance', 'A precise visual and olfactive language shaped around restraint.'],
@@ -28,7 +29,7 @@ export default function AboutPage() {
           </p>
         </motion.div>
         <motion.div variants={revealSlow} initial="hidden" animate="visible" className="relative mx-auto h-[420px] w-full max-w-[520px] overflow-hidden bg-white/[0.035] sm:h-[580px]">
-          <Image src="/images/valoir-logo.jpg" alt="Valoir Parfum emblem" fill className="object-cover opacity-90" priority />
+          <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum emblem" fill className="object-cover opacity-90" priority />
         </motion.div>
       </section>
 

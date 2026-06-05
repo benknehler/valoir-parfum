@@ -7,6 +7,7 @@ import { Menu, ShoppingBag, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useCart } from './CartContext.jsx';
 import { luxuryEase } from '../lib/motion.js';
+import { assetPath } from '../lib/assets.js';
 
 const nav = [
   { href: '/', label: 'Home' },
@@ -38,7 +39,7 @@ export default function Header() {
         <div className="lux-container grid h-20 grid-cols-[auto_1fr_auto] items-center gap-5 lg:h-24">
           <Link href="/" className="group flex items-center gap-3" aria-label="Valoir home">
             <span className="relative h-11 w-11 overflow-hidden rounded-full ring-1 ring-champagne/40">
-              <Image src="/images/valoir-logo.jpg" alt="Valoir Parfum" fill className="object-cover" priority />
+              <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum" fill className="object-cover" priority />
             </span>
             <span className="font-serif text-2xl font-semibold text-porcelain">Valoir</span>
           </Link>

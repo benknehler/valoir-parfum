@@ -1,6 +1,7 @@
 import { Cormorant_Garamond, Inter } from 'next/font/google';
 import './globals.css';
 import AppShell from '../components/AppShell.jsx';
+import { assetPath } from '../lib/assets.js';
 
 const editorial = Cormorant_Garamond({
   subsets: ['latin'],
@@ -22,8 +23,8 @@ export const metadata = {
     'Valoir Parfum is a high-end fragrance commerce experience for modern, memorable scent DNA.',
   metadataBase: new URL('https://benknehler.github.io/valoir-parfum/'),
   icons: {
-    icon: '/favicon.png',
-    shortcut: '/favicon.ico',
+    icon: assetPath('/favicon.png'),
+    shortcut: assetPath('/favicon.ico'),
   },
   openGraph: {
     title: 'Valoir Parfum',

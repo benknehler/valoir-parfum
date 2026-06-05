@@ -8,6 +8,9 @@ const nextConfig = {
   output: 'export',
   basePath: isProduction ? '/valoir-parfum' : '',
   assetPrefix: isProduction ? '/valoir-parfum/' : undefined,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isProduction ? '/valoir-parfum' : '',
+  },
   turbopack: {
     root: projectRoot,
   },

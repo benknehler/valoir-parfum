@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { luxuryEase } from '../lib/motion.js';
+import { assetPath } from '../lib/assets.js';
 
 export default function PageLoader() {
   const [visible, setVisible] = useState(true);
@@ -29,7 +30,7 @@ export default function PageLoader() {
             transition={{ duration: 0.86, ease: luxuryEase }}
             className="relative h-24 w-24"
           >
-            <Image src="/images/valoir-logo.jpg" alt="Valoir Parfum" fill className="rounded-full object-cover" priority />
+            <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum" fill className="rounded-full object-cover" priority />
           </motion.div>
         </motion.div>
       )}
