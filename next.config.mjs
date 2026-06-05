@@ -6,6 +6,7 @@ const projectRoot = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   output: 'export',
+  trailingSlash: true,
   basePath: isProduction ? '/valoir-parfum' : '',
   assetPrefix: isProduction ? '/valoir-parfum/' : undefined,
   env: {
