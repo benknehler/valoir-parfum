@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useCart } from './CartContext.jsx';
@@ -11,6 +12,13 @@ import { luxuryEase } from '../lib/motion.js';
 
 export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, cartItems, subtotal, updateQuantity, removeItem } = useCart();
+  const pathname = usePathname();
+  const isDtcExperience =
+    pathname === '/neu' ||
+    pathname === '/kollektion' ||
+    pathname === '/ueber-uns' ||
+    pathname.startsWith('/produkt/');
+  const collectionHref = isDtcExperience ? '/kollektion' : '/shop';
 
   return (
     <AnimatePresence>
@@ -53,11 +61,9 @@ export default function CartDrawer() {
               {cartItems.length === 0 ? (
                 <div className="flex min-h-[52vh] flex-col justify-center">
                   <p className="eyebrow">Noch leer</p>
-                  <h3 className="mt-5 font-serif text-5xl leading-none">Wähle deine Duftwelt.</h3>
-                  <p className="body-lux mt-6">
-                    Beginne mit dunkler Kirsche oder goldener Wärme.
-                  </p>
-                  <Link href="/shop" className="button-lux button-lux-primary mt-8" onClick={() => setIsCartOpen(false)}>
+                  <h3 className="mt-5 font-serif text-5xl leading-none">Dein Warenkorb ist leer.</h3>
+                  <p className="body-lux mt-6">Entdecke die Valoir Kollektion.</p>
+                  <Link href={collectionHref} className="button-lux button-lux-primary mt-8" onClick={() => setIsCartOpen(false)}>
                     Kollektion entdecken
                   </Link>
                 </div>
@@ -112,7 +118,7 @@ export default function CartDrawer() {
                 Zur Kasse
               </button>
               <p className="mt-4 text-center text-xs leading-5 text-charcoal/40">
-                Steuern und Versand werden im Checkout berechnet.
+                Steuern und Versand werden beim Bezahlen berechnet.
               </p>
             </div>
           </motion.aside>

@@ -11,18 +11,23 @@ import { pageTransition } from '../lib/motion.js';
 
 export default function AppShell({ children }) {
   const pathname = usePathname();
+  const isDtcExperience =
+    pathname === '/neu' ||
+    pathname === '/kollektion' ||
+    pathname === '/ueber-uns' ||
+    pathname.startsWith('/produkt/');
 
   return (
     <CartProvider>
       <PageLoader />
-      <Header />
+      {!isDtcExperience && <Header />}
       <CartDrawer />
       <AnimatePresence mode="wait">
         <motion.main key={pathname} className="page-shell" {...pageTransition}>
           {children}
         </motion.main>
       </AnimatePresence>
-      <Footer />
+      {!isDtcExperience && <Footer />}
     </CartProvider>
   );
 }

@@ -19,7 +19,7 @@ export default function CartPage() {
           Deine Auswahl ist geöffnet.
         </h1>
         <p className="body-lux mx-auto mt-8 max-w-xl">
-          Prüfe Duft, Größe und Menge im Warenkorb. Der Checkout ist vorbereitet und kann später angebunden werden.
+          Prüfe Duft, Größe und Menge im Warenkorb. Die Kaufstrecke ist vorbereitet und kann später angebunden werden.
         </p>
         <Link href="/shop" className="button-lux button-lux-primary mt-10">
           Zur Kollektion

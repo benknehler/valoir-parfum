@@ -4,6 +4,17 @@
 
 :root {
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+  --color-cream: #fbf7ef;
+  --color-ivory: #fffdf8;
+  --color-champagne: #d6bd86;
+  --color-soft-gold: #b9975b;
+  --color-taupe: #a99a88;
+  --color-cerice: #7b1f2b;
+  --color-amber: #bd7a2f;
+  --color-text: #1d1915;
+  --color-muted: #746b61;
+  --font-display: var(--font-editorial);
+  --font-body: var(--font-sans);
   color-scheme: light;
 }
 
