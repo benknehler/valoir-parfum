@@ -11,6 +11,7 @@ import { useCart } from '../CartContext.jsx';
 import QuantityControl from '../QuantityControl.jsx';
 import DtcLayout from './DtcLayout.jsx';
 import DtcProductScene from './DtcProductScene.jsx';
+import ScentMotionScene from './ScentMotionScene.jsx';
 
 function Reveal({ children, className = '', delay = 0 }) {
   return (
@@ -227,6 +228,7 @@ function ScentProfile({ profile }) {
 
 export default function DtcProductDetailPage({ product }) {
   const profile = dtcProfiles[product.slug];
+  const isNoirCerice = product.slug === 'noir-cerice';
 
   return (
     <DtcLayout>
@@ -241,6 +243,18 @@ export default function DtcProductDetailPage({ product }) {
           </Reveal>
         </div>
       </section>
+
+      {isNoirCerice && (
+        <ScentMotionScene
+          product={product}
+          productName="Noir Cerice"
+          tone="dark-cerise"
+          headline="Die Komposition von Noir Cerice"
+          subline="Schwarzkirsche, schwarze Rose und rauchige Ambra vereinen sich zu einer tiefen, samtigen Duftsignatur."
+          notes={profile.notes}
+          visualTheme={['bordeaux', 'black cherry', 'smoked amber', 'velvet', 'dark rose']}
+        />
+      )}
 
       <section className="relative pb-28 sm:pb-40">
         <div className="lux-container grid gap-24">
