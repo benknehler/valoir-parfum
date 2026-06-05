@@ -17,7 +17,7 @@ export default function CartDrawer() {
       {isCartOpen && (
         <>
           <motion.button
-            className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-md"
+            className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-xl"
             type="button"
             aria-label="Close cart"
             initial={{ opacity: 0 }}
@@ -27,7 +27,7 @@ export default function CartDrawer() {
             onClick={() => setIsCartOpen(false)}
           />
           <motion.aside
-            className="fixed right-0 top-0 z-[80] flex h-dvh w-full max-w-[470px] flex-col border-l border-white/10 bg-ink/86 text-porcelain shadow-luxury backdrop-blur-2xl"
+            className="fixed right-0 top-0 z-[80] flex h-dvh w-full max-w-[500px] flex-col border-l border-white/10 bg-ink/80 text-porcelain backdrop-blur-2xl"
             initial={{ x: '100%', filter: 'blur(16px)' }}
             animate={{ x: 0, filter: 'blur(0px)' }}
             exit={{ x: '100%', filter: 'blur(12px)' }}
@@ -36,10 +36,10 @@ export default function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-6">
               <div>
-                <p className="eyebrow">Private Cart</p>
-                <h2 className="font-serif text-4xl leading-none">Selection</h2>
+                <p className="eyebrow">Private selection</p>
+                <h2 className="font-serif text-5xl leading-none">Cart</h2>
               </div>
-              <button className="grid h-11 w-11 place-items-center border border-white/12" type="button" aria-label="Close cart" onClick={() => setIsCartOpen(false)}>
+              <button className="grid h-11 w-11 place-items-center border border-white/10 bg-white/[0.02] transition-colors hover:border-champagne/50" type="button" aria-label="Close cart" onClick={() => setIsCartOpen(false)}>
                 <X size={19} aria-hidden="true" />
               </button>
             </div>
@@ -50,10 +50,10 @@ export default function CartDrawer() {
                   <p className="eyebrow">Empty</p>
                   <h3 className="mt-5 font-serif text-5xl leading-none">Nothing selected yet.</h3>
                   <p className="body-lux mt-6">
-                    Begin with a fragrance that feels intimate, memorable and quietly commanding.
+                    Begin with shadow lacquer or solar amber.
                   </p>
                   <Link href="/shop" className="button-lux button-lux-primary mt-8" onClick={() => setIsCartOpen(false)}>
-                    Shop the Collection
+                    Discover Collection
                   </Link>
                 </div>
               ) : (
@@ -68,6 +68,7 @@ export default function CartDrawer() {
                           <div>
                             <h3 className="font-serif text-2xl leading-none">{item.product.name}</h3>
                             <p className="mt-2 text-xs uppercase tracking-nav text-cream/50">{item.size}</p>
+                            <p className="mt-1 text-xs text-cream/40">{formatPrice(item.unitPrice)} each</p>
                           </div>
                           <strong className="text-sm text-champagne">{formatPrice(item.total)}</strong>
                         </div>
@@ -94,7 +95,7 @@ export default function CartDrawer() {
 
             <div className="border-t border-white/10 px-6 py-6">
               <label htmlFor="drawer-discount" className="eyebrow">
-                Gift code
+                Private code
               </label>
               <input id="drawer-discount" className="lux-input mt-3" placeholder="VALOIR10" />
               <div className="mt-6 flex items-center justify-between text-sm uppercase tracking-nav text-cream/60">
@@ -102,10 +103,10 @@ export default function CartDrawer() {
                 <strong className="text-lg tracking-normal text-porcelain">{formatPrice(subtotal)}</strong>
               </div>
               <button className="button-lux button-lux-primary mt-6 w-full" type="button">
-                Checkout
+                Proceed to Checkout
               </button>
               <p className="mt-4 text-center text-xs leading-5 text-cream/40">
-                Dummy checkout prepared for Stripe, Shopify Checkout or a custom backend.
+                Taxes and delivery are calculated at checkout.
               </p>
             </div>
           </motion.aside>

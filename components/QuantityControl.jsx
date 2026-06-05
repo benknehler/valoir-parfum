@@ -6,7 +6,7 @@ export default function QuantityControl({ value, onChange, label = 'Quantity' })
   const numericValue = Number(value);
 
   return (
-    <div className="inline-grid h-12 grid-cols-[42px_52px_42px] border border-white/12 bg-white/[0.035]" aria-label={label}>
+    <div className="inline-grid h-12 grid-cols-[42px_52px_42px] border border-white/10 bg-white/[0.035]" aria-label={label}>
       <button type="button" aria-label="Decrease quantity" onClick={() => onChange(Math.max(1, numericValue - 1))}>
         <Minus size={15} aria-hidden="true" className="mx-auto" />
       </button>

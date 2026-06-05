@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { products } from '../lib/products.js';
+import { getSizePrice, products } from '../lib/products.js';
 
 const CartContext = createContext(null);
 const storageKey = 'valoir-luxury-cart-v2';
@@ -32,7 +32,9 @@ export function CartProvider({ children }) {
       items
         .map((item) => {
           const product = products.find((entry) => entry.id === item.id);
-          return product ? { ...item, product, total: product.price * item.quantity } : null;
+          if (!product) return null;
+          const unitPrice = getSizePrice(product, item.size);
+          return { ...item, product, unitPrice, total: unitPrice * item.quantity };
         })
         .filter(Boolean),
     [items]

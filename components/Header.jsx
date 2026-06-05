@@ -10,10 +10,10 @@ import { luxuryEase } from '../lib/motion.js';
 import { assetPath } from '../lib/assets.js';
 
 const nav = [
-  { href: '/', label: 'Home' },
+  { href: '/', label: 'Valoir' },
   { href: '/about', label: 'Maison' },
   { href: '/shop', label: 'Collection' },
-  { href: '/#dna', label: 'DNA' },
+  { href: '/#newsletter', label: 'Private List' },
 ];
 
 export default function Header() {
@@ -30,7 +30,7 @@ export default function Header() {
     <>
       <motion.header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-700 ease-luxury ${
-          scrolled ? 'border-b border-white/10 bg-ink/60 shadow-luxury backdrop-blur-2xl' : 'bg-transparent'
+          scrolled ? 'border-b border-white/10 bg-ink/60 backdrop-blur-2xl' : 'bg-transparent'
         }`}
         initial={{ y: -90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -55,7 +55,7 @@ export default function Header() {
 
           <div className="flex items-center justify-end gap-3">
             <button
-              className="group relative grid h-11 w-11 place-items-center border border-white/15 bg-white/[0.03] text-porcelain backdrop-blur-xl transition-colors duration-500 hover:border-champagne/60"
+              className="group relative grid h-11 w-11 place-items-center border border-white/20 bg-white/[0.03] text-porcelain backdrop-blur-xl transition-colors duration-500 hover:border-champagne/60"
               type="button"
               aria-label={`Open cart with ${count} items`}
               onClick={() => setIsCartOpen(true)}
@@ -66,7 +66,7 @@ export default function Header() {
               </span>
             </button>
             <button
-              className="grid h-11 w-11 place-items-center border border-white/15 bg-white/[0.03] text-porcelain backdrop-blur-xl transition-colors duration-500 hover:border-champagne/60 lg:hidden"
+              className="grid h-11 w-11 place-items-center border border-white/20 bg-white/[0.03] text-porcelain backdrop-blur-xl transition-colors duration-500 hover:border-champagne/60 lg:hidden"
               type="button"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={menuOpen}
@@ -81,13 +81,14 @@ export default function Header() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-ink/92 px-6 pt-28 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 overflow-hidden bg-ink/90 px-6 pt-28 backdrop-blur-2xl lg:hidden"
             initial={{ opacity: 0, filter: 'blur(20px)' }}
             animate={{ opacity: 1, filter: 'blur(0px)' }}
             exit={{ opacity: 0, filter: 'blur(14px)' }}
             transition={{ duration: 0.55, ease: luxuryEase }}
           >
-            <div className="hairline" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(142,14,29,0.2),transparent_24rem),radial-gradient(circle_at_80%_62%,rgba(194,106,27,0.16),transparent_26rem)]" />
+            <div className="hairline relative" />
             <nav className="grid py-9" aria-label="Mobile navigation">
               {nav.map((item, index) => (
                 <motion.div

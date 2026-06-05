@@ -18,9 +18,8 @@ const sans = Inter({
 });
 
 export const metadata = {
-  title: 'Valoir Parfum | Fragrance composed for the unforgettable.',
-  description:
-    'Valoir Parfum is a high-end fragrance commerce experience for modern, memorable scent DNA.',
+  title: 'Valoir Parfum | Dark cherry. Golden heat.',
+  description: 'Valoir Parfum presents Noir Cerice and Luna Solea, two fragrance atmospheres built in shadow and amber light.',
   metadataBase: new URL('https://benknehler.github.io/valoir-parfum/'),
   icons: {
     icon: assetPath('/favicon.png'),
@@ -28,7 +27,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Valoir Parfum',
-    description: 'Fragrance composed for the unforgettable.',
+    description: 'Dark cherry. Golden heat. A signature that stays.',
     type: 'website',
   },
 };
