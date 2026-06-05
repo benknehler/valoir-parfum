@@ -45,7 +45,7 @@ Deno.serve(async (req: Request) => {
     if (body.action === 'test_connection') {
       await sevdeskFetch('/Contact?limit=1');
       await logIntegration(supabase, { provider: 'sevdesk', action: 'test_connection', status: 'success' });
-      return jsonResponse({ ok: true, message: 'sevDesk connection successful.' });
+      return jsonResponse({ ok: true, message: 'sevDesk-Verbindung erfolgreich.' });
     }
 
     const orderId = body.order_id;

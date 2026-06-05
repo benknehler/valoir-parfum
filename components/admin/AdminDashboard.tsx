@@ -3,13 +3,20 @@
 import AdminBadge from './AdminBadge';
 import AdminCard from './AdminCard';
 import AdminTable from './AdminTable';
-import { useAdminOrders, useAdminProducts, useDashboardMetrics } from '../../lib/admin/useAdminData';
+import { useAdminOrders, useAdminProducts, useAdminSettings, useDashboardMetrics } from '../../lib/admin/useAdminData';
 import type { AdminOrder } from '../../lib/admin/types';
 
 export default function AdminDashboard() {
   const dashboardMetrics = useDashboardMetrics();
   const orders = useAdminOrders();
   const products = useAdminProducts();
+  const settings = useAdminSettings();
+  const openTasks = [
+    !settings?.legal_company_name ? 'Rechtliche Betreiberangaben ergänzen' : '',
+    !settings?.shipper_street ? 'Absenderadresse für DHL hinterlegen' : '',
+    'Stripe Webhook mit Live-Schlüssel testen',
+    'sevDesk, DHL und Brevo Zugangsdaten in Supabase Secrets prüfen',
+  ].filter(Boolean);
 
   return (
     <div className="grid gap-6">
@@ -37,7 +44,7 @@ export default function AdminDashboard() {
         </AdminCard>
         <AdminCard title="Offene Aufgaben">
           <div className="grid gap-3">
-            {['Supabase Projekt verbinden', 'Admin-Konto mit Rolle admin anlegen', 'sevDesk API-Key setzen', 'DHL Zugangsdaten setzen', 'Brevo Liste verbinden'].map((task) => (
+            {openTasks.map((task) => (
               <div key={task} className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-700">
                 {task}
               </div>

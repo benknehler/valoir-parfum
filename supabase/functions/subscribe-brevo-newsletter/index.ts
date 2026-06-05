@@ -34,6 +34,12 @@ Deno.serve(async (req: Request) => {
 
     if (!email || !email.includes('@')) return jsonResponse({ ok: false, error: 'Valid email is required.' }, 400);
 
+    const listId = Number(Deno.env.get('BREVO_LIST_ID'));
+    const templateId = Number(Deno.env.get('BREVO_DOUBLE_OPT_IN_TEMPLATE_ID'));
+    if (!Deno.env.get('BREVO_API_KEY') || !listId || !templateId) {
+      return jsonResponse({ ok: false, error: 'Brevo ist serverseitig nicht vollständig konfiguriert.' }, 500);
+    }
+
     const token = crypto.randomUUID();
     const { data: subscriber, error } = await supabase
       .from('newsletter_subscribers')
@@ -51,35 +57,18 @@ Deno.serve(async (req: Request) => {
 
     if (error) throw error;
 
-    const listId = Number(Deno.env.get('BREVO_LIST_ID'));
-    const templateId = Number(Deno.env.get('BREVO_DOUBLE_OPT_IN_TEMPLATE_ID'));
-
-    if (listId && templateId) {
-      await brevoFetch('/contacts/doubleOptinConfirmation', {
-        method: 'POST',
-        body: JSON.stringify({
-          email,
-          includeListIds: [listId],
-          templateId,
-          redirectionUrl: body.redirection_url || 'https://benknehler.github.io/valoir-parfum/neu/',
-          attributes: {
-            VALOIR_SOURCE: body.source || 'website',
-          },
-        }),
-      });
-    } else {
-      await brevoFetch('/contacts', {
-        method: 'POST',
-        body: JSON.stringify({
-          email,
-          listIds: listId ? [listId] : [],
-          updateEnabled: true,
-          attributes: {
-            VALOIR_SOURCE: body.source || 'website',
-          },
-        }),
-      });
-    }
+    await brevoFetch('/contacts/doubleOptinConfirmation', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        includeListIds: [listId],
+        templateId,
+        redirectionUrl: body.redirection_url || 'https://benknehler.github.io/valoir-parfum/neu/',
+        attributes: {
+          VALOIR_SOURCE: body.source || 'website',
+        },
+      }),
+    });
 
     await logIntegration(supabase, { provider: 'brevo', action: 'subscribe_newsletter', status: 'success' });
     return jsonResponse({ ok: true, subscriber_id: subscriber.id });

@@ -30,6 +30,12 @@ Deno.serve(async (req: Request) => {
   try {
     const { supabase, user } = await requireAdmin(req);
     const body = await req.json().catch(() => ({}));
+    if (body.action === 'test_connection') {
+      await brevoFetch('/account');
+      await logIntegration(supabase, { provider: 'brevo', action: 'test_connection', status: 'success' });
+      return jsonResponse({ ok: true, message: 'Brevo-Verbindung erfolgreich.' });
+    }
+
     const campaignId = body.campaign_id;
     const mode = body.mode || 'draft';
 
@@ -39,11 +45,14 @@ Deno.serve(async (req: Request) => {
       if (error) throw error;
       campaign = data;
     } else {
+      if (!body.subject || !body.html_content) {
+        return jsonResponse({ ok: false, error: 'Betreff und HTML-Inhalt sind erforderlich.' }, 400);
+      }
       campaign = {
-        title: body.title || 'Valoir Kampagne',
-        subject: body.subject || 'Neu von Valoir',
+        title: body.title || body.subject,
+        subject: body.subject,
         preview_text: body.preview_text || '',
-        html_content: body.html_content || '<p>Valoir Parfum</p>',
+        html_content: body.html_content,
       };
     }
 

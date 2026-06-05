@@ -47,7 +47,7 @@ Deno.serve(async (req: Request) => {
     if (body.action === 'test_connection') {
       await dhlFetch('/parcel/de/shipping/v2/products');
       await logIntegration(supabase, { provider: 'dhl', action: 'test_connection', status: 'success' });
-      return jsonResponse({ ok: true, message: 'DHL connection successful.' });
+      return jsonResponse({ ok: true, message: 'DHL-Verbindung erfolgreich.' });
     }
 
     const orderId = body.order_id;
@@ -81,6 +81,8 @@ Deno.serve(async (req: Request) => {
 
     if (addressError || !address) throw new Error(addressError?.message || 'Shipping address missing.');
 
+    const { data: settings } = await supabase.from('shop_settings').select('*').eq('id', true).maybeSingle();
+
     const items = (order.order_items || []) as OrderItem[];
     const weightKg = Math.max(
       0.1,
@@ -95,12 +97,12 @@ Deno.serve(async (req: Request) => {
           billingNumber: Deno.env.get('DHL_BILLING_NUMBER'),
           refNo: order.order_number,
           shipper: {
-            name1: 'Valoir Parfum',
-            addressStreet: Deno.env.get('DHL_SHIPPER_STREET') || '',
-            addressHouse: Deno.env.get('DHL_SHIPPER_HOUSE_NUMBER') || '',
-            postalCode: Deno.env.get('DHL_SHIPPER_POSTAL_CODE') || '',
-            city: Deno.env.get('DHL_SHIPPER_CITY') || '',
-            country: 'DEU',
+            name1: settings?.shipper_name || 'Valoir Parfum',
+            addressStreet: Deno.env.get('DHL_SHIPPER_STREET') || settings?.shipper_street || '',
+            addressHouse: Deno.env.get('DHL_SHIPPER_HOUSE_NUMBER') || settings?.shipper_house_number || '',
+            postalCode: Deno.env.get('DHL_SHIPPER_POSTAL_CODE') || settings?.shipper_postal_code || '',
+            city: Deno.env.get('DHL_SHIPPER_CITY') || settings?.shipper_city || '',
+            country: settings?.shipper_country === 'DE' ? 'DEU' : settings?.shipper_country || 'DEU',
           },
           consignee: {
             name1: `${address.first_name} ${address.last_name}`.trim(),

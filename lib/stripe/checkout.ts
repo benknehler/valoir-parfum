@@ -8,7 +8,7 @@ type CheckoutItem = {
   quantity: number;
 };
 
-export async function createStripeCheckoutSession(items: CheckoutItem[]) {
+export async function createStripeCheckoutSession(items: CheckoutItem[], discountCode?: string) {
   if (!items.length) {
     throw new Error('Dein Warenkorb ist leer.');
   }
@@ -22,6 +22,7 @@ export async function createStripeCheckoutSession(items: CheckoutItem[]) {
     },
     body: JSON.stringify({
       origin: `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH || ''}`,
+      discountCode: discountCode?.trim().toUpperCase() || undefined,
       items: items.map((item) => ({
         id: item.id,
         size: item.size,

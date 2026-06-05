@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Gift, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { dtcFaq, dtcProfiles, dtcServices } from '../../lib/dtcContent.js';
+import { subscribeNewsletter } from '../../lib/newsletter/subscribe.ts';
 import { luxuryEase } from '../../lib/motion.js';
 import { products } from '../../lib/products.js';
 import DtcLayout from './DtcLayout.jsx';
@@ -27,6 +28,26 @@ function Reveal({ children, className = '', delay = 0 }) {
 }
 
 function NewsletterBlock() {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      await subscribeNewsletter(email, 'dtc_home');
+      setMessage('Bitte bestätige deine Anmeldung über die E-Mail von Valoir.');
+      setEmail('');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Die Anmeldung konnte nicht gespeichert werden.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <section id="newsletter" className="relative overflow-hidden py-24 sm:py-32">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
@@ -41,7 +62,7 @@ function NewsletterBlock() {
             <p className="mt-8 max-w-2xl text-lg leading-8 text-charcoal/68">
               Erhalte 10 % auf deine erste Valoir-Bestellung und exklusiven Zugang zu neuen Duftkompositionen.
             </p>
-            <form className="mt-12 grid gap-5 sm:grid-cols-[1fr_auto]" onSubmit={(event) => event.preventDefault()}>
+            <form className="mt-12 grid gap-5 sm:grid-cols-[1fr_auto]" onSubmit={handleSubmit}>
               <label className="sr-only" htmlFor="dtc-newsletter-email">
                 E-Mail-Adresse
               </label>
@@ -49,13 +70,16 @@ function NewsletterBlock() {
                 id="dtc-newsletter-email"
                 className="lux-input"
                 type="email"
+                value={email}
                 required
                 placeholder="E-Mail-Adresse"
+                onChange={(event) => setEmail(event.target.value)}
               />
-              <button className="button-lux button-lux-primary min-w-[12rem]" type="submit">
-                Rabatt sichern
+              <button className="button-lux button-lux-primary min-w-[12rem]" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Speichern...' : 'Rabatt sichern'}
               </button>
             </form>
+            {message && <p className="mt-5 text-sm leading-6 text-charcoal/62">{message}</p>}
           </div>
         </Reveal>
       </div>
@@ -94,7 +118,7 @@ function FaqSection() {
             Stimmen zur Duftwelt.
           </h2>
           <p className="mt-8 max-w-md text-lg leading-8 text-charcoal/66">
-            Kundenbewertungen erscheinen hier nach dem offiziellen Launch.
+            Antworten zu Versand, Rückgabe, Geschenkverpackung und Newsletter.
           </p>
         </Reveal>
         <Reveal className="rounded-[2rem] bg-pearl/62 p-6 shadow-[0_24px_90px_rgba(68,46,24,0.08)] backdrop-blur-2xl sm:p-10">

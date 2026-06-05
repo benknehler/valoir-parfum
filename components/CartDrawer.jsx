@@ -10,11 +10,28 @@ import QuantityControl from './QuantityControl.jsx';
 import { formatPrice } from '../lib/products.js';
 import { luxuryEase } from '../lib/motion.js';
 import { createStripeCheckoutSession } from '../lib/stripe/checkout.ts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { validateDiscountCode } from '../lib/discounts/validate.ts';
 
 export default function CartDrawer() {
-  const { isCartOpen, setIsCartOpen, cartItems, subtotal, updateQuantity, removeItem } = useCart();
+  const {
+    isCartOpen,
+    setIsCartOpen,
+    cartItems,
+    subtotal,
+    shippingCost,
+    discount,
+    discountTotal,
+    total,
+    updateQuantity,
+    removeItem,
+    applyDiscount,
+    clearDiscount,
+  } = useCart();
   const [checkoutError, setCheckoutError] = useState('');
+  const [discountCode, setDiscountCode] = useState(discount?.code || '');
+  const [discountMessage, setDiscountMessage] = useState('');
+  const [isApplyingDiscount, setIsApplyingDiscount] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const pathname = usePathname();
   const normalizedPathname = pathname !== '/' ? pathname.replace(/\/$/, '') : pathname;
@@ -24,6 +41,10 @@ export default function CartDrawer() {
     normalizedPathname === '/ueber-uns' ||
     normalizedPathname.startsWith('/produkt/');
   const collectionHref = isDtcExperience ? '/kollektion' : '/shop';
+
+  useEffect(() => {
+    if (discount?.code) setDiscountCode(discount.code);
+  }, [discount?.code]);
 
   async function handleCheckout() {
     setCheckoutError('');
@@ -35,13 +56,33 @@ export default function CartDrawer() {
           id: item.product.id,
           size: item.size,
           quantity: item.quantity,
-        }))
+        })),
+        discount?.code
       );
       window.location.href = checkoutUrl;
     } catch (error) {
       setCheckoutError(error instanceof Error ? error.message : 'Stripe Checkout konnte nicht gestartet werden.');
       setIsCheckingOut(false);
     }
+  }
+
+  async function handleApplyDiscount(event) {
+    event.preventDefault();
+    setDiscountMessage('');
+    setCheckoutError('');
+    setIsApplyingDiscount(true);
+
+    const result = await validateDiscountCode(discountCode, subtotal);
+    if (result.ok) {
+      applyDiscount(result);
+      setDiscountCode(result.code || discountCode.trim().toUpperCase());
+      setDiscountMessage('Rabatt wurde angewendet.');
+    } else {
+      clearDiscount();
+      setDiscountMessage(result.message || 'Der Rabattcode ist nicht gültig.');
+    }
+
+    setIsApplyingDiscount(false);
   }
 
   return (
@@ -130,13 +171,45 @@ export default function CartDrawer() {
             </div>
 
             <div className="border-t border-gold/20 px-6 py-6">
-              <label htmlFor="drawer-discount" className="eyebrow">
-                Rabattcode
-              </label>
-              <input id="drawer-discount" className="lux-input mt-3" placeholder="VALOIR10" />
+              <form onSubmit={handleApplyDiscount}>
+                <label htmlFor="drawer-discount" className="eyebrow">
+                  Rabattcode
+                </label>
+                <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
+                  <input
+                    id="drawer-discount"
+                    className="lux-input"
+                    value={discountCode}
+                    placeholder="WELCOME10"
+                    onChange={(event) => setDiscountCode(event.target.value.toUpperCase())}
+                  />
+                  <button className="button-lux" type="submit" disabled={cartItems.length === 0 || isApplyingDiscount}>
+                    {isApplyingDiscount ? 'Prüfen...' : 'Anwenden'}
+                  </button>
+                </div>
+              </form>
+              {discountMessage && (
+                <p className={`mt-3 text-sm leading-6 ${discount?.code ? 'text-charcoal/58' : 'text-cherry'}`}>
+                  {discountMessage}
+                </p>
+              )}
               <div className="mt-6 flex items-center justify-between text-sm uppercase tracking-nav text-charcoal/60">
                 <span>Zwischensumme</span>
                 <strong className="text-lg tracking-normal text-charcoal">{formatPrice(subtotal)}</strong>
+              </div>
+              {discount?.code && discountTotal > 0 && (
+                <div className="mt-3 flex items-center justify-between text-sm uppercase tracking-nav text-charcoal/60">
+                  <span>Rabatt {discount.code}</span>
+                  <strong className="tracking-normal text-charcoal">-{formatPrice(discountTotal)}</strong>
+                </div>
+              )}
+              <div className="mt-3 flex items-center justify-between text-sm uppercase tracking-nav text-charcoal/60">
+                <span>Versand</span>
+                <strong className="tracking-normal text-charcoal">{shippingCost === 0 ? 'Kostenfrei' : formatPrice(shippingCost)}</strong>
+              </div>
+              <div className="mt-5 flex items-center justify-between border-t border-gold/20 pt-5 text-sm uppercase tracking-nav text-charcoal/60">
+                <span>Gesamt</span>
+                <strong className="text-xl tracking-normal text-charcoal">{formatPrice(total)}</strong>
               </div>
               {checkoutError && (
                 <p className="mt-4 rounded-2xl bg-cherry/10 px-4 py-3 text-sm leading-6 text-cherry">
@@ -152,7 +225,7 @@ export default function CartDrawer() {
                 {isCheckingOut ? 'Weiterleitung...' : 'Zur Kasse'}
               </button>
               <p className="mt-4 text-center text-xs leading-5 text-charcoal/40">
-                Steuern und Versand werden beim Bezahlen berechnet.
+                Der Checkout wird sicher über Stripe geöffnet.
               </p>
             </div>
           </motion.aside>

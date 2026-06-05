@@ -289,7 +289,7 @@ export default function DtcProductDetailPage({ product }) {
             <div>
               <p className="eyebrow mb-5">Service</p>
               <p className="text-base leading-8 text-charcoal/62">
-                Geschenkverpackung ist für beide Größen vorgesehen. Die Kaufstrecke ist so angelegt, dass später Stripe, Shopify oder ein eigenes Backend angebunden werden kann.
+                Geschenkverpackung ist für beide Größen vorgesehen. Die Kaufstrecke wird über Stripe Checkout geöffnet.
               </p>
             </div>
           </Reveal>

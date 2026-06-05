@@ -1,16 +1,29 @@
 'use client';
 
 import { useId, useState } from 'react';
+import { subscribeNewsletter } from '../lib/newsletter/subscribe.ts';
 
 export default function NewsletterForm({ compact = false }) {
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const id = useId();
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     if (!email.trim()) return;
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setMessage('');
+
+    try {
+      await subscribeNewsletter(email, 'public_newsletter');
+      setMessage('Bitte bestätige deine Anmeldung über die E-Mail von Valoir.');
+      setEmail('');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Die Anmeldung konnte nicht gespeichert werden.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -48,11 +61,11 @@ export default function NewsletterForm({ compact = false }) {
           placeholder="E-Mail-Adresse"
           onChange={(event) => setEmail(event.target.value)}
         />
-        <button className="button-lux button-lux-primary border-champagne bg-champagne text-charcoal" type="submit">
-          Anmelden
+        <button className="button-lux button-lux-primary border-champagne bg-champagne text-charcoal" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Speichern...' : 'Anmelden'}
         </button>
       </div>
-      {submitted && <p className="relative mt-5 text-sm text-champagne">Dein Code VALOIR10 ist bereit.</p>}
+      {message && <p className="relative mt-5 text-sm text-champagne">{message}</p>}
     </form>
   );
 }

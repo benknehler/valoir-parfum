@@ -19,15 +19,23 @@ export default function AdminTable<TRow extends { id: string }>({ columns, rows 
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {rows.map((row) => (
-              <tr key={row.id} className="hover:bg-slate-50/70">
-                {columns.map((column) => (
-                  <td key={column.key} className="px-4 py-4 align-middle text-slate-700">
-                    {column.render(row)}
-                  </td>
-                ))}
+            {rows.length === 0 ? (
+              <tr>
+                <td className="px-4 py-10 text-center text-sm text-slate-500" colSpan={columns.length}>
+                  Keine Einträge vorhanden.
+                </td>
               </tr>
-            ))}
+            ) : (
+              rows.map((row) => (
+                <tr key={row.id} className="hover:bg-slate-50/70">
+                  {columns.map((column) => (
+                    <td key={column.key} className="px-4 py-4 align-middle text-slate-700">
+                      {column.render(row)}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

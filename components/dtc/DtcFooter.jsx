@@ -8,6 +8,8 @@ const links = [
   { href: '/contact', label: 'Kontakt' },
   { href: '/shipping', label: 'Versand' },
   { href: '/returns', label: 'Rückgabe' },
+  { href: '/agb', label: 'AGB' },
+  { href: '/widerruf', label: 'Widerruf' },
   { href: '/privacy', label: 'Datenschutz' },
   { href: '/imprint', label: 'Impressum' },
 ];

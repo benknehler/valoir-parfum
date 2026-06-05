@@ -12,7 +12,7 @@ function SetupNotice() {
     <div className="min-h-screen bg-slate-100 px-5 py-10 text-slate-900">
       <div className="mx-auto max-w-2xl rounded-3xl border border-amber-200 bg-white p-8 shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">Supabase Setup</p>
-        <h1 className="mt-4 text-3xl font-semibold">Backend noch nicht verbunden</h1>
+        <h1 className="mt-4 text-3xl font-semibold">Supabase-Konfiguration erforderlich</h1>
         <p className="mt-4 leading-7 text-slate-600">
           Lege die Werte aus `.env.example` in deiner Umgebung an und führe die Migrationen aus `supabase/migrations` in deinem
           Valoir-Supabase-Projekt aus. Danach prüft dieser Bereich Login, Rolle und RLS über Supabase Auth.
