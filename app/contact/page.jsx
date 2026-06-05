@@ -1,7 +1,7 @@
 import InfoPage from '../../components/InfoPage.jsx';
 
 export const metadata = {
-  title: 'Contact | Valoir Parfum',
+  title: 'Kontakt | Valoir Parfum',
 };
 
 export default function ContactPage() {

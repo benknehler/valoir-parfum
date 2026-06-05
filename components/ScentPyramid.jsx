@@ -6,17 +6,17 @@ export default function ScentPyramid({ product, refined = false }) {
           key={layer}
           className={`relative overflow-hidden ${
             refined
-              ? `${index === 0 ? 'ml-[18%]' : index === 1 ? 'ml-[9%]' : 'ml-0'} border-t border-champagne/20 py-7`
-              : 'border-t border-champagne/20 py-8'
+              ? `${index === 0 ? 'ml-[18%]' : index === 1 ? 'ml-[9%]' : 'ml-0'} border-t border-gold/25 py-7`
+              : 'border-t border-gold/25 py-8'
           }`}
         >
-          <span className="text-[0.65rem] font-semibold uppercase tracking-luxury text-champagne/50">
+          <span className="text-[0.65rem] font-semibold uppercase tracking-luxury text-gold/70">
             0{index + 1}
           </span>
-          <h3 className="mt-4 font-serif text-5xl leading-none text-porcelain">{layer}</h3>
+          <h3 className="mt-4 font-serif text-5xl leading-none text-charcoal">{layer}</h3>
           <div className="mt-5 flex flex-wrap gap-2">
             {notes.map((note) => (
-              <span key={note} className="bg-white/[0.035] px-3 py-2 text-xs text-cream/70">
+              <span key={note} className="rounded-full bg-pearl/70 px-3 py-2 text-xs text-charcoal/60 shadow-[0_10px_36px_rgba(68,46,24,0.06)]">
                 {note}
               </span>
             ))}

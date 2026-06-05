@@ -1,7 +1,7 @@
 import InfoPage from '../../components/InfoPage.jsx';
 
 export const metadata = {
-  title: 'Imprint | Valoir Parfum',
+  title: 'Impressum | Valoir Parfum',
 };
 
 export default function ImprintPage() {

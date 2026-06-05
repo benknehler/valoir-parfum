@@ -14,15 +14,15 @@ export default function CartPage() {
   return (
     <section className="lux-container flex min-h-[78vh] items-center justify-center py-32 text-center">
       <div className="max-w-2xl">
-        <p className="eyebrow">Private selection</p>
-        <h1 className="mt-6 font-serif text-6xl leading-none text-porcelain md:text-8xl">
-          Your cart is open.
+        <p className="eyebrow">Warenkorb</p>
+        <h1 className="mt-6 font-serif text-6xl leading-none text-charcoal md:text-8xl">
+          Deine Auswahl ist geöffnet.
         </h1>
         <p className="body-lux mx-auto mt-8 max-w-xl">
-          Review shadow lacquer, solar amber and the size that follows you longest.
+          Prüfe Duft, Größe und Menge im Warenkorb. Der Checkout ist vorbereitet und kann später angebunden werden.
         </p>
         <Link href="/shop" className="button-lux button-lux-primary mt-10">
-          Continue Collection
+          Zur Kollektion
         </Link>
       </div>
     </section>

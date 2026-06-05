@@ -1,68 +1,75 @@
 'use client';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import MotionSection from './MotionSection.jsx';
 import ProductVisual from './ProductVisual.jsx';
 import { products } from '../lib/products.js';
 import { revealSlow } from '../lib/motion.js';
-import { motion } from 'framer-motion';
 import { assetPath } from '../lib/assets.js';
 
 const values = [
-  ['Restraint', 'Nothing loud. Nothing accidental. Every note has a reason to stay.'],
-  ['Texture', 'Cherry, smoke, fruit, cream and amber shaped as materials, not decoration.'],
-  ['Presence', 'Fragrance made to arrive quietly and remain after the room changes.'],
-  ['Contrast', 'Dark lacquer beside solar heat. A house built between the two.'],
+  ['Eleganz', 'Reduktion, die nicht leer wirkt. Jede Linie muss atmen.'],
+  ['Präsenz', 'Ein Duft soll leise beginnen und lange im Raum bleiben.'],
+  ['Sinnlichkeit', 'Frucht, Blüte, Holz und Ambra werden als Nähe gedacht.'],
+  ['Duftkunst', 'Moderne Kompositionen mit klarer Struktur und warmer Tiefe.'],
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <section className="lux-container grid min-h-dvh items-center gap-12 pb-24 pt-32 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="lux-container grid min-h-dvh items-center gap-14 pb-24 pt-32 lg:grid-cols-[1.04fr_0.96fr]">
         <motion.div variants={revealSlow} initial="hidden" animate="visible">
-          <p className="eyebrow">Maison Valoir</p>
-          <h1 className="section-title mt-6">A house built between shadow and heat.</h1>
+          <p className="eyebrow">Über Valoir</p>
+          <h1 className="section-title mt-6 max-w-5xl">Duft als Form von Präsenz.</h1>
           <p className="body-lux mt-8 max-w-2xl">
-            Valoir composes fragrance as atmosphere. Noir Cerice moves through lacquered cherry,
-            rose and smoke. Luna Solea turns fruit, cream and amber into sun-warmed skin.
+            Valoir Parfum entwickelt Düfte für Menschen, die nicht lauter wirken möchten,
+            sondern genauer. Jede Komposition trägt eine klare Stimmung: dunkle Tiefe oder
+            goldene Wärme.
           </p>
         </motion.div>
-        <motion.div variants={revealSlow} initial="hidden" animate="visible" className="relative mx-auto h-[420px] w-full max-w-[520px] overflow-hidden sm:h-[580px]">
-          <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum emblem" fill className="object-cover opacity-90" priority />
+        <motion.div
+          variants={revealSlow}
+          initial="hidden"
+          animate="visible"
+          className="relative mx-auto aspect-[4/5] w-full max-w-[560px] overflow-hidden rounded-[2.6rem] bg-pearl shadow-luxury"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(214,189,134,0.42),transparent_24rem),linear-gradient(180deg,#fffdf8,#f1e6d5)]" />
+          <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum Logo" fill className="object-cover opacity-90 mix-blend-multiply" priority />
         </motion.div>
       </section>
 
-      <section className="section-space border-y border-white/10 bg-[#050302]">
-        <div className="lux-container grid gap-12 lg:grid-cols-2">
-          <MotionSection slow>
-            <ProductVisual product={products[0]} className="min-h-[680px]" />
+      <section className="section-space border-y border-gold/20 bg-pearl/40">
+        <div className="lux-container grid items-end gap-14 lg:grid-cols-2">
+          <MotionSection className="relative h-[680px]" slow>
+            <ProductVisual product={products[1]} className="absolute inset-0" imageClassName="object-[50%_43%]" />
           </MotionSection>
-          <MotionSection className="flex items-end" slow>
-            <div>
-              <h2 className="mt-6 font-serif text-6xl leading-none text-porcelain md:text-8xl">
-                The bottle is the beginning. The atmosphere does the rest.
-              </h2>
-              <p className="body-lux mt-8">
-                Each Valoir fragrance is edited like a scene: light direction, temperature,
-                texture, distance. The result is intimate, but never invisible.
-              </p>
-              <p className="body-lux mt-6">
-                Luxury appears in the restraint: fewer signatures, sharper memories.
-              </p>
-            </div>
+          <MotionSection slow>
+            <p className="eyebrow">Haus Valoir</p>
+            <h2 className="mt-6 font-serif text-[clamp(3.8rem,7vw,7.8rem)] font-semibold leading-[0.88] text-charcoal">
+              Zwei Signaturen, bewusst kuratiert.
+            </h2>
+            <p className="body-lux mt-8">
+              Noir Cerice trägt rote Frucht, Rose und Rauch in eine dunkle Tiefe.
+              Luna Solea setzt Pfirsich, Mango und Vanille-Amber in warmes Licht.
+            </p>
+            <p className="body-lux mt-6">
+              Valoir bleibt klein in der Auswahl, präzise im Ausdruck und großzügig in der Wirkung.
+            </p>
           </MotionSection>
         </div>
       </section>
 
       <section className="section-space lux-container">
         <MotionSection className="mb-14 max-w-4xl" slow>
-          <h2 className="section-title">What Valoir keeps.</h2>
+          <p className="eyebrow">Werte</p>
+          <h2 className="section-title mt-6">Was bleibt.</h2>
         </MotionSection>
-        <div className="grid gap-px bg-white/10 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-4">
           {values.map(([title, text]) => (
-            <MotionSection key={title} className="min-h-[300px] bg-ink p-8" slow>
-              <h3 className="font-serif text-4xl leading-none text-porcelain">{title}</h3>
-              <p className="mt-8 leading-7 text-cream/60">{text}</p>
+            <MotionSection key={title} className="min-h-[300px] rounded-[1.8rem] bg-pearl/70 p-8 shadow-[0_20px_80px_rgba(68,46,24,0.08)]" slow>
+              <h3 className="font-serif text-4xl leading-none text-charcoal">{title}</h3>
+              <p className="mt-8 leading-7 text-charcoal/60">{text}</p>
             </MotionSection>
           ))}
         </div>

@@ -4,7 +4,7 @@
 
 :root {
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -13,18 +13,18 @@
 
 html {
   scroll-behavior: smooth;
-  background: #050403;
+  background: #fbf7ef;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
-  color: #fff8eb;
+  color: #1d1915;
   background:
-    radial-gradient(ellipse at 72% 8%, rgba(194, 106, 27, 0.17), transparent 34rem),
-    radial-gradient(ellipse at 16% 18%, rgba(142, 14, 29, 0.2), transparent 36rem),
-    linear-gradient(180deg, #030202 0%, #0a0605 42%, #030202 100%);
+    radial-gradient(circle at 18% 8%, rgba(214, 189, 134, 0.28), transparent 28rem),
+    radial-gradient(circle at 82% 12%, rgba(189, 122, 47, 0.12), transparent 30rem),
+    linear-gradient(180deg, #fffdf8 0%, #fbf7ef 48%, #f3eadc 100%);
   font-family: var(--font-sans), Inter, sans-serif;
   text-rendering: geometricPrecision;
 }
@@ -36,20 +36,8 @@ body::before {
   z-index: -2;
   pointer-events: none;
   background:
-    linear-gradient(108deg, transparent 0%, rgba(255, 248, 235, 0.045) 42%, transparent 54%),
-    linear-gradient(244deg, transparent 12%, rgba(255, 248, 235, 0.03) 48%, transparent 66%);
-  opacity: 0.8;
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at center, transparent 28%, rgba(0, 0, 0, 0.6) 100%),
-    linear-gradient(180deg, rgba(255, 248, 235, 0.03), transparent 18%);
+    linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.58) 42%, transparent 56%),
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.76), transparent 42rem);
 }
 
 img {
@@ -68,22 +56,22 @@ button {
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.45;
+  opacity: 0.5;
 }
 
 ::selection {
-  color: #050403;
-  background: #d7bc85;
+  color: #fffdf8;
+  background: #7b1f2b;
 }
 
 :focus-visible {
-  outline: 2px solid rgba(215, 188, 133, 0.85);
+  outline: 2px solid rgba(185, 151, 91, 0.8);
   outline-offset: 4px;
 }
 
 @layer components {
   .page-shell {
-    @apply relative min-h-screen overflow-hidden;
+    @apply relative min-h-screen overflow-hidden bg-ivory text-charcoal;
   }
 
   .lux-container {
@@ -91,32 +79,37 @@ button:disabled {
   }
 
   .section-space {
-    @apply py-24 sm:py-32 lg:py-40;
+    @apply py-24 sm:py-32 lg:py-44;
   }
 
   .eyebrow {
-    @apply font-sans text-[0.68rem] font-semibold uppercase tracking-luxury text-champagne/80;
+    @apply font-sans text-[0.67rem] font-semibold uppercase tracking-luxury text-gold;
   }
 
   .editorial-title {
-    @apply font-serif text-[clamp(3.6rem,9vw,8.9rem)] font-semibold leading-[0.82] tracking-normal text-porcelain;
+    @apply font-serif text-[clamp(4.2rem,11vw,13rem)] font-semibold leading-[0.78] tracking-normal text-charcoal;
   }
 
   .section-title {
-    @apply font-serif text-[clamp(3rem,6.5vw,7.5rem)] font-semibold leading-[0.88] tracking-normal text-porcelain;
+    @apply font-serif text-[clamp(3.1rem,6.8vw,8.4rem)] font-semibold leading-[0.88] tracking-normal text-charcoal;
   }
 
   .body-lux {
-    @apply text-base leading-8 text-cream/70 sm:text-lg;
+    @apply text-base leading-8 text-charcoal/70 sm:text-lg;
   }
 
   .button-lux {
-    @apply relative inline-flex min-h-12 items-center justify-center overflow-hidden rounded-none border border-champagne/40 px-7 text-[0.7rem] font-semibold uppercase tracking-nav text-porcelain transition-all duration-500 ease-luxury;
+    @apply relative inline-flex min-h-12 items-center justify-center overflow-hidden rounded-full border border-charcoal/20 bg-transparent px-7 text-[0.68rem] font-semibold uppercase tracking-nav text-charcoal transition-all duration-500 ease-luxury;
   }
 
   .button-lux::before {
     content: '';
-    @apply absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-champagne transition-transform duration-500 ease-luxury;
+    @apply absolute inset-0 origin-left scale-x-0 rounded-full bg-charcoal transition-transform duration-500 ease-luxury;
+  }
+
+  .button-lux span,
+  .button-lux {
+    @apply relative;
   }
 
   .button-lux:hover::before {
@@ -124,27 +117,31 @@ button:disabled {
   }
 
   .button-lux:hover {
-    @apply border-champagne/70 bg-champagne/10 text-white;
+    @apply border-charcoal text-ivory;
   }
 
   .button-lux-primary {
-    @apply border-champagne/70 bg-champagne text-ink;
+    @apply border-charcoal bg-charcoal text-ivory;
+  }
+
+  .button-lux-primary::before {
+    @apply bg-gold;
   }
 
   .button-lux-primary:hover {
-    @apply bg-porcelain text-ink;
+    @apply border-gold text-charcoal;
   }
 
-  .glass-panel {
-    @apply border border-white/10 bg-white/5 shadow-luxury backdrop-blur-2xl;
+  .surface-soft {
+    @apply bg-pearl/70 shadow-luxury backdrop-blur-2xl;
   }
 
   .hairline {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-champagne/30 to-transparent;
+    @apply h-px w-full bg-gradient-to-r from-transparent via-gold/30 to-transparent;
   }
 
   .lux-input {
-    @apply h-14 w-full rounded-none border-0 border-b border-champagne/30 bg-transparent px-0 text-sm text-porcelain outline-none transition-colors duration-500 placeholder:text-cream/40 focus:border-champagne;
+    @apply h-14 w-full rounded-none border-0 border-b border-gold/40 bg-transparent px-0 text-sm text-charcoal outline-none transition-colors duration-500 placeholder:text-charcoal/40 focus:border-charcoal;
   }
 }
 

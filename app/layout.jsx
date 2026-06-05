@@ -18,8 +18,8 @@ const sans = Inter({
 });
 
 export const metadata = {
-  title: 'Valoir Parfum | Dark cherry. Golden heat.',
-  description: 'Valoir Parfum presents Noir Cerice and Luna Solea, two fragrance atmospheres built in shadow and amber light.',
+  title: 'Valoir Parfum | Zwei Duftwelten. Eine Präsenz.',
+  description: 'Valoir Parfum präsentiert Noir Cerice und Luna Solea, zwei moderne Duftwelten in dunkler Kirsche und goldener Wärme.',
   metadataBase: new URL('https://benknehler.github.io/valoir-parfum/'),
   icons: {
     icon: assetPath('/favicon.png'),
@@ -27,14 +27,14 @@ export const metadata = {
   },
   openGraph: {
     title: 'Valoir Parfum',
-    description: 'Dark cherry. Golden heat. A signature that stays.',
+    description: 'Zwei Duftwelten. Eine unverwechselbare Präsenz.',
     type: 'website',
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${editorial.variable} ${sans.variable}`}>
+    <html lang="de" className={`${editorial.variable} ${sans.variable}`}>
       <body>
         <AppShell>{children}</AppShell>
       </body>

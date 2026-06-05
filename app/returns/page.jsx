@@ -1,7 +1,7 @@
 import InfoPage from '../../components/InfoPage.jsx';
 
 export const metadata = {
-  title: 'Returns | Valoir Parfum',
+  title: 'Rückgabe | Valoir Parfum',
 };
 
 export default function ReturnsPage() {

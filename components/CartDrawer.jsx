@@ -17,9 +17,9 @@ export default function CartDrawer() {
       {isCartOpen && (
         <>
           <motion.button
-            className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-xl"
+            className="fixed inset-0 z-[70] bg-charcoal/25 backdrop-blur-xl"
             type="button"
-            aria-label="Close cart"
+            aria-label="Warenkorb schließen"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -27,19 +27,24 @@ export default function CartDrawer() {
             onClick={() => setIsCartOpen(false)}
           />
           <motion.aside
-            className="fixed right-0 top-0 z-[80] flex h-dvh w-full max-w-[500px] flex-col border-l border-white/10 bg-ink/80 text-porcelain backdrop-blur-2xl"
+            className="fixed right-0 top-0 z-[80] flex h-dvh w-full max-w-[520px] flex-col border-l border-gold/20 bg-pearl/90 text-charcoal shadow-luxury backdrop-blur-2xl"
             initial={{ x: '100%', filter: 'blur(16px)' }}
             animate={{ x: 0, filter: 'blur(0px)' }}
             exit={{ x: '100%', filter: 'blur(12px)' }}
             transition={{ duration: 0.72, ease: luxuryEase }}
-            aria-label="Cart drawer"
+            aria-label="Warenkorb"
           >
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-6">
+            <div className="flex items-center justify-between border-b border-gold/20 px-6 py-6">
               <div>
-                <p className="eyebrow">Private selection</p>
-                <h2 className="font-serif text-5xl leading-none">Cart</h2>
+                <p className="eyebrow">Auswahl</p>
+                <h2 className="font-serif text-5xl leading-none">Warenkorb</h2>
               </div>
-              <button className="grid h-11 w-11 place-items-center border border-white/10 bg-white/[0.02] transition-colors hover:border-champagne/50" type="button" aria-label="Close cart" onClick={() => setIsCartOpen(false)}>
+              <button
+                className="grid h-11 w-11 place-items-center rounded-full border border-charcoal/10 bg-pearl/70 transition-colors hover:border-gold/50"
+                type="button"
+                aria-label="Warenkorb schließen"
+                onClick={() => setIsCartOpen(false)}
+              >
                 <X size={19} aria-hidden="true" />
               </button>
             </div>
@@ -47,43 +52,44 @@ export default function CartDrawer() {
             <div className="flex-1 overflow-y-auto px-6 py-7">
               {cartItems.length === 0 ? (
                 <div className="flex min-h-[52vh] flex-col justify-center">
-                  <p className="eyebrow">Empty</p>
-                  <h3 className="mt-5 font-serif text-5xl leading-none">Nothing selected yet.</h3>
+                  <p className="eyebrow">Noch leer</p>
+                  <h3 className="mt-5 font-serif text-5xl leading-none">Wähle deine Duftwelt.</h3>
                   <p className="body-lux mt-6">
-                    Begin with shadow lacquer or solar amber.
+                    Beginne mit dunkler Kirsche oder goldener Wärme.
                   </p>
                   <Link href="/shop" className="button-lux button-lux-primary mt-8" onClick={() => setIsCartOpen(false)}>
-                    Discover Collection
+                    Kollektion entdecken
                   </Link>
                 </div>
               ) : (
                 <div className="space-y-6">
                   {cartItems.map((item) => (
-                    <article key={`${item.product.id}-${item.size}`} className="grid grid-cols-[92px_1fr] gap-4 border-b border-white/10 pb-6">
-                      <div className="relative h-28 overflow-hidden bg-white/[0.04]">
-                        <Image src={item.product.image} alt={item.product.imageAlt} fill className="object-cover" />
+                    <article key={`${item.product.id}-${item.size}`} className="grid grid-cols-[92px_1fr] gap-4 border-b border-gold/20 pb-6">
+                      <div className="relative h-28 overflow-hidden rounded-[1.2rem] bg-linen">
+                        <Image src={item.product.image} alt={item.product.imageAlt} fill className="object-cover object-[50%_44%]" />
+                        <div className="absolute inset-0 bg-pearl/20" />
                       </div>
                       <div>
                         <div className="flex justify-between gap-4">
                           <div>
                             <h3 className="font-serif text-2xl leading-none">{item.product.name}</h3>
-                            <p className="mt-2 text-xs uppercase tracking-nav text-cream/50">{item.size}</p>
-                            <p className="mt-1 text-xs text-cream/40">{formatPrice(item.unitPrice)} each</p>
+                            <p className="mt-2 text-xs uppercase tracking-nav text-charcoal/50">{item.size}</p>
+                            <p className="mt-1 text-xs text-charcoal/40">{formatPrice(item.unitPrice)} pro Stück</p>
                           </div>
-                          <strong className="text-sm text-champagne">{formatPrice(item.total)}</strong>
+                          <strong className="text-sm text-charcoal">{formatPrice(item.total)}</strong>
                         </div>
                         <div className="mt-5 flex items-center justify-between gap-4">
                           <QuantityControl
                             value={item.quantity}
-                            label={`Quantity for ${item.product.name}`}
+                            label={`Menge für ${item.product.name}`}
                             onChange={(quantity) => updateQuantity(item.product.id, item.size, quantity)}
                           />
                           <button
-                            className="text-[0.68rem] font-semibold uppercase tracking-nav text-cream/50 transition-colors hover:text-champagne"
+                            className="text-[0.68rem] font-semibold uppercase tracking-nav text-charcoal/50 transition-colors hover:text-gold"
                             type="button"
                             onClick={() => removeItem(item.product.id, item.size)}
                           >
-                            Remove
+                            Entfernen
                           </button>
                         </div>
                       </div>
@@ -93,20 +99,20 @@ export default function CartDrawer() {
               )}
             </div>
 
-            <div className="border-t border-white/10 px-6 py-6">
+            <div className="border-t border-gold/20 px-6 py-6">
               <label htmlFor="drawer-discount" className="eyebrow">
-                Private code
+                Rabattcode
               </label>
               <input id="drawer-discount" className="lux-input mt-3" placeholder="VALOIR10" />
-              <div className="mt-6 flex items-center justify-between text-sm uppercase tracking-nav text-cream/60">
-                <span>Subtotal</span>
-                <strong className="text-lg tracking-normal text-porcelain">{formatPrice(subtotal)}</strong>
+              <div className="mt-6 flex items-center justify-between text-sm uppercase tracking-nav text-charcoal/60">
+                <span>Zwischensumme</span>
+                <strong className="text-lg tracking-normal text-charcoal">{formatPrice(subtotal)}</strong>
               </div>
               <button className="button-lux button-lux-primary mt-6 w-full" type="button">
-                Proceed to Checkout
+                Zur Kasse
               </button>
-              <p className="mt-4 text-center text-xs leading-5 text-cream/40">
-                Taxes and delivery are calculated at checkout.
+              <p className="mt-4 text-center text-xs leading-5 text-charcoal/40">
+                Steuern und Versand werden im Checkout berechnet.
               </p>
             </div>
           </motion.aside>

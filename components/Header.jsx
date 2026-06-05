@@ -10,10 +10,10 @@ import { luxuryEase } from '../lib/motion.js';
 import { assetPath } from '../lib/assets.js';
 
 const nav = [
-  { href: '/', label: 'Valoir' },
-  { href: '/about', label: 'Maison' },
-  { href: '/shop', label: 'Collection' },
-  { href: '/#newsletter', label: 'Private List' },
+  { href: '/', label: 'Start' },
+  { href: '/shop', label: 'Kollektion' },
+  { href: '/about', label: 'Über uns' },
+  { href: '/#newsletter', label: 'Newsletter' },
 ];
 
 export default function Header() {
@@ -23,52 +23,59 @@ export default function Header() {
   const { count, setIsCartOpen } = useCart();
 
   useEffect(() => {
-    return scrollY.on('change', (value) => setScrolled(value > 24));
+    return scrollY.on('change', (value) => setScrolled(value > 18));
   }, [scrollY]);
 
   return (
     <>
       <motion.header
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-700 ease-luxury ${
-          scrolled ? 'border-b border-white/10 bg-ink/60 backdrop-blur-2xl' : 'bg-transparent'
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-luxury ${
+          scrolled
+            ? 'border-b border-gold/20 bg-pearl/80 shadow-[0_18px_70px_rgba(65,44,24,0.08)] backdrop-blur-2xl'
+            : 'bg-pearl/30 backdrop-blur-[10px]'
         }`}
-        initial={{ y: -90, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: luxuryEase }}
+        initial={{ y: -88, opacity: 0, filter: 'blur(12px)' }}
+        animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+        transition={{ duration: 0.85, ease: luxuryEase }}
       >
-        <div className="lux-container grid h-20 grid-cols-[auto_1fr_auto] items-center gap-5 lg:h-24">
-          <Link href="/" className="group flex items-center gap-3" aria-label="Valoir home">
-            <span className="relative h-11 w-11 overflow-hidden rounded-full ring-1 ring-champagne/40">
-              <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum" fill className="object-cover" priority />
+        <div className="lux-container grid h-[4.5rem] grid-cols-[auto_1fr_auto] items-center gap-5 py-4 lg:h-[5.5rem]">
+          <Link href="/" className="group flex items-center gap-3" aria-label="Valoir Startseite">
+            <span className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-gold/30 transition-transform duration-700 ease-luxury group-hover:scale-[1.04]">
+              <Image src={assetPath('/images/valoir-logo.jpg')} alt="Valoir Parfum Logo" fill className="object-cover" priority />
             </span>
-            <span className="font-serif text-2xl font-semibold text-porcelain">Valoir</span>
+            <span className="font-serif text-2xl font-semibold leading-none text-charcoal">Valoir</span>
           </Link>
 
-          <nav className="hidden items-center justify-center gap-10 lg:flex" aria-label="Primary navigation">
+          <nav className="hidden items-center justify-center gap-10 lg:flex" aria-label="Hauptnavigation">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className="group relative text-[0.68rem] font-semibold uppercase tracking-nav text-cream/70 transition-colors duration-500 hover:text-porcelain">
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group relative text-[0.68rem] font-semibold uppercase tracking-nav text-charcoal/60 transition-colors duration-500 hover:text-charcoal"
+              >
                 {item.label}
-                <span className="absolute -bottom-2 left-0 h-px w-full origin-left scale-x-0 bg-champagne transition-transform duration-500 ease-luxury group-hover:scale-x-100" />
+                <span className="absolute -bottom-2 left-0 h-px w-full origin-left scale-x-0 bg-gold transition-transform duration-500 ease-luxury group-hover:scale-x-100" />
               </Link>
             ))}
           </nav>
 
           <div className="flex items-center justify-end gap-3">
             <button
-              className="group relative grid h-11 w-11 place-items-center border border-white/20 bg-white/[0.03] text-porcelain backdrop-blur-xl transition-colors duration-500 hover:border-champagne/60"
+              className="group relative inline-flex h-11 items-center justify-center gap-2 rounded-full border border-charcoal/10 bg-pearl/50 px-3 text-charcoal backdrop-blur-xl transition-all duration-500 ease-luxury hover:border-gold/60 hover:bg-pearl lg:px-4"
               type="button"
-              aria-label={`Open cart with ${count} items`}
+              aria-label={`Warenkorb mit ${count} Artikeln öffnen`}
               onClick={() => setIsCartOpen(true)}
             >
-              <ShoppingBag size={18} aria-hidden="true" />
-              <span className="absolute -right-2 -top-2 grid h-5 min-w-5 place-items-center bg-champagne px-1 text-[0.65rem] font-bold text-ink">
+              <ShoppingBag size={17} aria-hidden="true" />
+              <span className="hidden text-[0.67rem] font-semibold uppercase tracking-nav lg:inline">Warenkorb</span>
+              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-charcoal px-1 text-[0.62rem] font-bold text-ivory">
                 {count}
               </span>
             </button>
             <button
-              className="grid h-11 w-11 place-items-center border border-white/20 bg-white/[0.03] text-porcelain backdrop-blur-xl transition-colors duration-500 hover:border-champagne/60 lg:hidden"
+              className="grid h-11 w-11 place-items-center rounded-full border border-charcoal/10 bg-pearl/50 text-charcoal backdrop-blur-xl transition-all duration-500 ease-luxury hover:border-gold/60 hover:bg-pearl lg:hidden"
               type="button"
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((value) => !value)}
             >
@@ -81,25 +88,24 @@ export default function Header() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 overflow-hidden bg-ink/90 px-6 pt-28 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 overflow-hidden bg-ivory/95 px-6 pt-28 text-charcoal backdrop-blur-2xl lg:hidden"
             initial={{ opacity: 0, filter: 'blur(20px)' }}
             animate={{ opacity: 1, filter: 'blur(0px)' }}
             exit={{ opacity: 0, filter: 'blur(14px)' }}
-            transition={{ duration: 0.55, ease: luxuryEase }}
+            transition={{ duration: 0.58, ease: luxuryEase }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(142,14,29,0.2),transparent_24rem),radial-gradient(circle_at_80%_62%,rgba(194,106,27,0.16),transparent_26rem)]" />
-            <div className="hairline relative" />
-            <nav className="grid py-9" aria-label="Mobile navigation">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(214,189,134,0.34),transparent_24rem),radial-gradient(circle_at_86%_68%,rgba(123,31,43,0.12),transparent_25rem)]" />
+            <nav className="relative grid border-t border-gold/20" aria-label="Mobile Navigation">
               {nav.map((item, index) => (
                 <motion.div
                   key={item.href}
-                  initial={{ opacity: 0, y: 22 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.08 + index * 0.06, duration: 0.65, ease: luxuryEase }}
+                  initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  transition={{ delay: 0.08 + index * 0.06, duration: 0.68, ease: luxuryEase }}
                 >
                   <Link
                     href={item.href}
-                    className="block border-b border-white/10 py-6 font-serif text-5xl leading-none text-porcelain"
+                    className="block border-b border-gold/20 py-6 font-serif text-5xl leading-none text-charcoal"
                     onClick={() => setMenuOpen(false)}
                   >
                     {item.label}
@@ -107,6 +113,16 @@ export default function Header() {
                 </motion.div>
               ))}
             </nav>
+            <button
+              className="button-lux button-lux-primary relative mt-10 w-full"
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                setIsCartOpen(true);
+              }}
+            >
+              Warenkorb öffnen
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,7 +1,7 @@
 import InfoPage from '../../components/InfoPage.jsx';
 
 export const metadata = {
-  title: 'Privacy | Valoir Parfum',
+  title: 'Datenschutz | Valoir Parfum',
 };
 
 export default function PrivacyPage() {

@@ -1,7 +1,7 @@
 import ShopPage from '../../components/ShopPage.jsx';
 
 export const metadata = {
-  title: 'Shop the Collection | Valoir Parfum',
+  title: 'Kollektion | Valoir Parfum',
 };
 
 export default function Page() {

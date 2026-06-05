@@ -1,7 +1,7 @@
 import InfoPage from '../../components/InfoPage.jsx';
 
 export const metadata = {
-  title: 'Shipping | Valoir Parfum',
+  title: 'Versand | Valoir Parfum',
 };
 
 export default function ShippingPage() {

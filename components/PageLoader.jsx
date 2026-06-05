@@ -18,7 +18,7 @@ export default function PageLoader() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[100] grid place-items-center bg-ink"
+          className="fixed inset-0 z-[100] grid place-items-center bg-ivory"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: 'blur(18px)' }}
           transition={{ duration: 0.7, ease: luxuryEase }}
