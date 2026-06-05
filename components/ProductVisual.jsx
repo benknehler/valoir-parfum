@@ -29,7 +29,7 @@ export default function ProductVisual({ product, priority = false, className = '
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_22%,rgba(215,188,133,0.24),transparent_28rem),linear-gradient(180deg,rgba(255,255,255,0.08),transparent_42%)]" />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,248,235,0.26),transparent_38%),linear-gradient(180deg,transparent,rgba(0,0,0,0.82))]" />
-      <motion.div className="relative h-full w-full" style={{ rotateX, rotateY }}>
+      <motion.div className="absolute inset-0" style={{ rotateX, rotateY }}>
         <Image
           src={product.image}
           alt={product.imageAlt}
