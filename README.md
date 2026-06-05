@@ -11,6 +11,13 @@ Moderne Luxus-Parfum-Shop-Website für die Marke Valoir Parfum.
 - Warenkorb mit lokaler Grundlogik
 - Newsletter-Anmeldung
 
+## Stack
+
+- Next.js App Router
+- Tailwind CSS
+- Framer Motion
+- Static Export für GitHub Pages
+
 ## Entwicklung
 
 ```bash
@@ -24,4 +31,4 @@ npm run dev
 npm run build
 ```
 
-Der Build ist für GitHub Pages unter `/valoir-parfum/` konfiguriert und erzeugt zusätzlich eine `404.html` als SPA-Fallback.
+Der Build ist für GitHub Pages unter `/valoir-parfum/` konfiguriert. Next exportiert nach `out`, danach wird der Export für den bestehenden Pages-Workflow nach `dist` kopiert.
