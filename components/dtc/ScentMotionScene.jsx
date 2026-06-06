@@ -35,307 +35,82 @@ function PhaseStack({ title, notes, className = '', style }) {
   );
 }
 
-function IngredientVisual({ type, label, className = '' }) {
-  const commonGlow = 'absolute inset-2 rounded-full blur-xl opacity-55';
+function PhotoIngredientLayer({
+  src,
+  alt,
+  className = '',
+  shouldReduceMotion = false,
+  motionPath = 'left',
+  delay = 0,
+}) {
+  const paths = {
+    left: { x: [-54, -8, 20, -12], y: [24, -8, -18, 8], rotate: [-3, 1.2, -0.6, -2], scale: [0.94, 1.03, 1.07, 0.98] },
+    right: { x: [54, 10, -20, 12], y: [22, -6, -16, 10], rotate: [3, -1.2, 0.6, 2], scale: [0.94, 1.035, 1.07, 0.98] },
+    lower: { x: [-34, -4, 16, -10], y: [34, 2, -22, 12], rotate: [-1.5, 0.8, -0.4, -1], scale: [0.94, 1.02, 1.06, 0.98] },
+    smoke: { x: [34, -8, -18, 10], y: [38, 4, -24, 16], rotate: [1, -0.8, 0.3, 0.8], scale: [0.93, 1.03, 1.08, 0.98] },
+  };
+  const path = paths[motionPath] || paths.left;
 
   return (
-    <div className={`relative h-24 w-24 ${className}`} aria-hidden="true" title={label}>
-      {type === 'cherry' && (
-        <>
-          <div className={`${commonGlow} bg-cherry`} />
-          <svg className="relative h-full w-full drop-shadow-[0_22px_30px_rgba(0,0,0,0.42)]" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="cherryFruit" cx="38%" cy="28%" r="70%">
-                <stop offset="0%" stopColor="#ffced2" />
-                <stop offset="18%" stopColor="#b6172f" />
-                <stop offset="70%" stopColor="#55000d" />
-                <stop offset="100%" stopColor="#170608" />
-              </radialGradient>
-              <linearGradient id="cherryStem" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#d6bd86" />
-                <stop offset="100%" stopColor="#3d2022" />
-              </linearGradient>
-            </defs>
-            <path d="M58 37c6-20 21-29 38-30" fill="none" stroke="url(#cherryStem)" strokeWidth="4" strokeLinecap="round" />
-            <path d="M59 40c-3-18 3-29 19-37" fill="none" stroke="url(#cherryStem)" strokeWidth="3" strokeLinecap="round" />
-            <circle cx="43" cy="67" r="30" fill="url(#cherryFruit)" />
-            <circle cx="76" cy="69" r="27" fill="url(#cherryFruit)" />
-            <ellipse cx="34" cy="54" rx="8" ry="14" fill="#fff5ed" opacity="0.42" transform="rotate(32 34 54)" />
-            <ellipse cx="68" cy="56" rx="6" ry="11" fill="#fff5ed" opacity="0.34" transform="rotate(24 68 56)" />
-          </svg>
-        </>
-      )}
-
-      {type === 'raspberry' && (
-        <>
-          <div className={`${commonGlow} bg-[#9f1832]`} />
-          <svg className="relative h-full w-full drop-shadow-[0_20px_28px_rgba(0,0,0,0.38)]" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="raspberryCell" cx="34%" cy="24%" r="76%">
-                <stop offset="0%" stopColor="#ffd0d7" />
-                <stop offset="18%" stopColor="#b91f3f" />
-                <stop offset="100%" stopColor="#3a050e" />
-              </radialGradient>
-            </defs>
-            {[
-              [58, 27, 14],
-              [41, 42, 16],
-              [62, 45, 17],
-              [81, 43, 15],
-              [35, 64, 15],
-              [55, 67, 18],
-              [77, 65, 17],
-              [48, 88, 13],
-              [69, 88, 14],
-            ].map(([cx, cy, r]) => (
-              <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={r} fill="url(#raspberryCell)" />
-            ))}
-            <path d="M51 28c-4-9 3-17 14-19 2 10-2 18-14 19Z" fill="#2b3b20" opacity="0.84" />
-            <path d="M61 29c3-10 12-14 23-10-4 9-12 13-23 10Z" fill="#46562c" opacity="0.74" />
-          </svg>
-        </>
-      )}
-
-      {type === 'pepper' && (
-        <div className="absolute inset-0">
-          <div className="absolute inset-7 rounded-full bg-[radial-gradient(circle,rgba(255,218,172,0.9),rgba(154,24,42,0.36)_45%,transparent_72%)] blur-md" />
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((dot) => (
-            <span
-              key={dot}
-              className="absolute h-3 w-3 rounded-full bg-[radial-gradient(circle_at_30%_25%,#fff5df,#cf7b70_44%,#6f1425)] shadow-[0_0_18px_rgba(214,189,134,0.5)]"
-              style={{
-                left: `${22 + ((dot * 19) % 54)}%`,
-                top: `${20 + ((dot * 31) % 58)}%`,
-              }}
-            />
-          ))}
-        </div>
-      )}
-
-      {type === 'bergamot' && (
-        <>
-          <div className={`${commonGlow} bg-[#f2cc74]`} />
-          <svg className="relative h-full w-full drop-shadow-[0_20px_28px_rgba(0,0,0,0.34)]" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="bergamotSkin" cx="35%" cy="25%" r="74%">
-                <stop offset="0%" stopColor="#fff8c9" />
-                <stop offset="44%" stopColor="#d8b449" />
-                <stop offset="100%" stopColor="#55662c" />
-              </radialGradient>
-              <linearGradient id="bergamotCut" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#fff7d1" />
-                <stop offset="100%" stopColor="#d6bd86" />
-              </linearGradient>
-            </defs>
-            <circle cx="57" cy="60" r="34" fill="url(#bergamotSkin)" />
-            <path d="M57 29a33 33 0 0 1 31 44L57 60Z" fill="url(#bergamotCut)" opacity="0.9" />
-            <path d="M57 60 89 58M57 60 79 38M57 60 86 74" stroke="#fff7da" strokeWidth="2" opacity="0.55" />
-            <circle cx="43" cy="46" r="5" fill="#fff8d9" opacity="0.45" />
-          </svg>
-        </>
-      )}
-
-      {type === 'rose' && (
-        <>
-          <div className={`${commonGlow} bg-[#781423]`} />
-          <svg className="relative h-full w-full drop-shadow-[0_22px_30px_rgba(0,0,0,0.44)]" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="rosePetal" cx="44%" cy="28%" r="78%">
-                <stop offset="0%" stopColor="#e8a4aa" />
-                <stop offset="38%" stopColor="#711326" />
-                <stop offset="100%" stopColor="#180507" />
-              </radialGradient>
-            </defs>
-            {[
-              'M62 21c20 13 22 33 7 42-20-4-27-23-7-42Z',
-              'M43 28c24 2 34 18 24 34-20 6-36-8-24-34Z',
-              'M82 42c10 20 2 36-17 38-13-14-7-34 17-38Z',
-              'M35 56c16-18 36-15 43 2-9 18-31 21-43-2Z',
-              'M55 78c18-9 34-2 35 15-17 11-34 7-35-15Z',
-            ].map((d) => (
-              <path key={d} d={d} fill="url(#rosePetal)" opacity="0.94" />
-            ))}
-            <circle cx="61" cy="59" r="13" fill="#4b0c16" opacity="0.92" />
-            <path d="M58 49c13 5 14 16 3 22-11-5-13-16-3-22Z" fill="#9f1832" />
-          </svg>
-        </>
-      )}
-
-      {type === 'plum' && (
-        <>
-          <div className={`${commonGlow} bg-[#5a132b]`} />
-          <svg className="relative h-full w-full drop-shadow-[0_22px_30px_rgba(0,0,0,0.42)]" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="plumFruit" cx="32%" cy="24%" r="78%">
-                <stop offset="0%" stopColor="#e6a1b2" />
-                <stop offset="32%" stopColor="#711a3c" />
-                <stop offset="100%" stopColor="#190711" />
-              </radialGradient>
-            </defs>
-            <ellipse cx="62" cy="63" rx="34" ry="40" fill="url(#plumFruit)" transform="rotate(13 62 63)" />
-            <path d="M66 25c-7 19-6 53 7 74" fill="none" stroke="#fff1ec" strokeWidth="2" opacity="0.24" />
-            <ellipse cx="47" cy="43" rx="8" ry="14" fill="#fff3ef" opacity="0.28" transform="rotate(34 47 43)" />
-          </svg>
-        </>
-      )}
-
-      {type === 'jasmine' && (
-        <>
-          <div className={`${commonGlow} bg-[#fff7df] opacity-35`} />
-          <svg className="relative h-full w-full drop-shadow-[0_18px_26px_rgba(0,0,0,0.32)]" viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="jasminePetal" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#fffdf7" />
-                <stop offset="100%" stopColor="#d6bd86" />
-              </linearGradient>
-            </defs>
-            {[0, 72, 144, 216, 288].map((rotation) => (
-              <ellipse
-                key={rotation}
-                cx="60"
-                cy="35"
-                rx="12"
-                ry="28"
-                fill="url(#jasminePetal)"
-                opacity="0.92"
-                transform={`rotate(${rotation} 60 60)`}
-              />
-            ))}
-            <circle cx="60" cy="60" r="9" fill="#c49b42" />
-            <circle cx="60" cy="60" r="4" fill="#fff4d6" opacity="0.78" />
-          </svg>
-        </>
-      )}
-
-      {type === 'patchouli' && (
-        <>
-          <div className={`${commonGlow} bg-[#2b251a]`} />
-          <svg className="relative h-full w-full drop-shadow-[0_20px_28px_rgba(0,0,0,0.42)]" viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="patchouliLeaf" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#9b8b5c" />
-                <stop offset="45%" stopColor="#37401d" />
-                <stop offset="100%" stopColor="#12120b" />
-              </linearGradient>
-            </defs>
-            <path d="M26 76c14-42 42-54 68-43-4 36-31 56-68 43Z" fill="url(#patchouliLeaf)" />
-            <path d="M38 69c19-16 34-25 52-31" fill="none" stroke="#d6bd86" strokeWidth="2" opacity="0.38" />
-            <path d="M51 59c-1-13 6-24 19-31 9 18 4 34-16 44Z" fill="url(#patchouliLeaf)" opacity="0.82" />
-          </svg>
-        </>
-      )}
-
-      {type === 'ebony' && (
-        <>
-          <div className={`${commonGlow} bg-black`} />
-          <svg className="relative h-full w-full drop-shadow-[0_24px_34px_rgba(0,0,0,0.54)]" viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="ebonyWood" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#5a4034" />
-                <stop offset="32%" stopColor="#160f0c" />
-                <stop offset="100%" stopColor="#020202" />
-              </linearGradient>
-            </defs>
-            <path d="M35 19h46l12 78H24Z" fill="url(#ebonyWood)" />
-            <path d="M43 26c-3 18 1 48-8 64M59 24c8 25-1 43 7 70M76 28c-10 19-3 39-12 61" fill="none" stroke="#b9975b" strokeWidth="1.5" opacity="0.24" />
-            <path d="M39 22h36" stroke="#fff8ef" strokeWidth="2" opacity="0.18" />
-          </svg>
-        </>
-      )}
-
-      {type === 'vanilla' && (
-        <>
-          <div className={`${commonGlow} bg-[#d6bd86] opacity-45`} />
-          <svg className="relative h-full w-full drop-shadow-[0_20px_28px_rgba(0,0,0,0.34)]" viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="vanillaPod" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#e6d1a6" />
-                <stop offset="44%" stopColor="#5b3125" />
-                <stop offset="100%" stopColor="#1b0d0a" />
-              </linearGradient>
-            </defs>
-            <path d="M47 14c20 20 22 61-6 91 7-34 4-61 6-91Z" fill="url(#vanillaPod)" />
-            <path d="M70 19c16 24 12 58-15 86 10-34 9-60 15-86Z" fill="url(#vanillaPod)" opacity="0.9" />
-            <path d="M49 22c7 23 3 46-3 70M70 27c4 22 0 43-10 64" fill="none" stroke="#fff5d8" strokeWidth="1.4" opacity="0.25" />
-          </svg>
-        </>
-      )}
-
-      {type === 'amber' && (
-        <>
-          <div className={`${commonGlow} bg-amber`} />
-          <svg className="relative h-full w-full drop-shadow-[0_20px_32px_rgba(0,0,0,0.34)]" viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="amberResin" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#fff0b9" />
-                <stop offset="42%" stopColor="#bd7a2f" />
-                <stop offset="100%" stopColor="#5b2109" />
-              </linearGradient>
-            </defs>
-            <path d="M61 14 95 41 84 92 35 104 18 53Z" fill="url(#amberResin)" />
-            <path d="M61 14 58 65 95 41M58 65 84 92M58 65 35 104M58 65 18 53" fill="none" stroke="#fff6d6" strokeWidth="2" opacity="0.27" />
-            <path d="M49 34c12-10 26-8 34 2" stroke="#fff7db" strokeWidth="3" opacity="0.28" />
-          </svg>
-        </>
-      )}
-
-      {type === 'musk' && (
-        <>
-          <div className={`${commonGlow} bg-[#f4dfc0] opacity-35`} />
-          <svg className="relative h-full w-full drop-shadow-[0_18px_26px_rgba(0,0,0,0.28)]" viewBox="0 0 120 120">
-            <defs>
-              <radialGradient id="muskOrb" cx="35%" cy="28%" r="68%">
-                <stop offset="0%" stopColor="#fffdf8" />
-                <stop offset="46%" stopColor="#d8c6ad" />
-                <stop offset="100%" stopColor="#7b6b62" />
-              </radialGradient>
-            </defs>
-            <circle cx="60" cy="60" r="31" fill="url(#muskOrb)" opacity="0.84" />
-            <circle cx="60" cy="60" r="43" fill="none" stroke="#fffdf8" strokeWidth="1.5" opacity="0.24" />
-            <path d="M28 66c17 10 45 10 64-5" fill="none" stroke="#fffdf8" strokeWidth="2" opacity="0.22" />
-          </svg>
-        </>
-      )}
-
-      {type === 'smoke' && (
-        <svg className="relative h-full w-full drop-shadow-[0_20px_30px_rgba(0,0,0,0.38)]" viewBox="0 0 120 120">
-          <defs>
-            <linearGradient id="smokeLine" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#d6bd86" stopOpacity="0.12" />
-              <stop offset="48%" stopColor="#fff3dd" stopOpacity="0.52" />
-              <stop offset="100%" stopColor="#7b1f2b" stopOpacity="0.1" />
-            </linearGradient>
-          </defs>
-          <path d="M48 103c-19-20 20-27 3-50-11-15 8-25 18-38" fill="none" stroke="url(#smokeLine)" strokeWidth="8" strokeLinecap="round" />
-          <path d="M72 104c19-21-20-28-2-53 10-15-5-24-8-36" fill="none" stroke="url(#smokeLine)" strokeWidth="5" strokeLinecap="round" opacity="0.75" />
-          <path d="M60 103c-4-24 30-31 15-55" fill="none" stroke="#fff8ef" strokeWidth="2" strokeLinecap="round" opacity="0.24" />
-        </svg>
-      )}
-    </div>
+    <motion.div
+      className={`absolute ${className}`}
+      initial={{ opacity: 0, scale: 0.9, filter: 'blur(24px)' }}
+      whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+      viewport={{ once: true, amount: 0.38 }}
+      animate={shouldReduceMotion ? undefined : path}
+      transition={
+        shouldReduceMotion
+          ? { duration: 0.01 }
+          : {
+              opacity: { duration: 1.4, delay, ease: luxuryEase },
+              filter: { duration: 1.4, delay, ease: luxuryEase },
+              scale: { duration: 13, delay, ease: luxuryEase, repeat: Infinity, repeatType: 'mirror' },
+              x: { duration: 15, delay, ease: luxuryEase, repeat: Infinity, repeatType: 'mirror' },
+              y: { duration: 16, delay, ease: luxuryEase, repeat: Infinity, repeatType: 'mirror' },
+              rotate: { duration: 18, delay, ease: luxuryEase, repeat: Infinity, repeatType: 'mirror' },
+            }
+      }
+    >
+      <div className="absolute inset-[14%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,241,224,0.32),rgba(123,31,43,0.14)_42%,transparent_72%)] blur-2xl" />
+      <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(105deg,rgba(255,255,255,0.12),transparent_34%,rgba(214,189,134,0.14)_62%,transparent_78%)] mix-blend-screen" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(min-width: 1024px) 34vw, 70vw"
+        className="object-contain drop-shadow-[0_34px_58px_rgba(0,0,0,0.42)]"
+      />
+    </motion.div>
   );
 }
 
-function IngredientCluster({ items, className = '', style }) {
+function IngredientCluster({ items, className = '', style, shouldReduceMotion = false }) {
   return (
     <motion.div className={`pointer-events-none absolute hidden lg:block ${className}`} style={style} aria-hidden="true">
       {items.map((item) => (
-        <IngredientVisual key={item.type} {...item} />
+        <PhotoIngredientLayer key={item.src} {...item} shouldReduceMotion={shouldReduceMotion} />
       ))}
     </motion.div>
   );
 }
 
-function MobileVisualRow({ items }) {
+function MobileVisualRow({ items, shouldReduceMotion = false }) {
   return (
-    <div className="flex flex-wrap gap-3" aria-hidden="true">
+    <div className="grid grid-cols-2 gap-4" aria-hidden="true">
       {items.map((item) => (
-        <IngredientVisual key={item.type} {...item} className="h-16 w-16" />
+        <div key={item.src} className="relative h-28 overflow-hidden rounded-[1.3rem] bg-[#1a0d0e]/60">
+          <PhotoIngredientLayer
+            {...item}
+            className="inset-0 h-full w-full"
+            shouldReduceMotion={shouldReduceMotion}
+          />
+        </div>
       ))}
     </div>
   );
 }
 
-function MobilePhase({ label, notes, visuals = [], children, delay = 0 }) {
+function MobilePhase({ label, notes, visuals = [], children, delay = 0, shouldReduceMotion = false }) {
   return (
     <motion.div
       className="grid gap-5 border-t border-champagne/18 pt-8"
@@ -345,7 +120,7 @@ function MobilePhase({ label, notes, visuals = [], children, delay = 0 }) {
       transition={{ duration: 0.9, delay, ease: luxuryEase }}
     >
       <PhaseLabel>{label}</PhaseLabel>
-      <MobileVisualRow items={visuals} />
+      <MobileVisualRow items={visuals} shouldReduceMotion={shouldReduceMotion} />
       <p className="max-w-xl text-base leading-8 text-ivory/68">{children}</p>
       <div className="grid gap-3">
         {notes.map((note) => (
@@ -442,30 +217,43 @@ export default function ScentMotionScene({
   const baseNotes = notes?.Basisnote || [];
   const [themePrimary = 'bordeaux'] = visualTheme;
   const topLeftVisuals = [
-    { type: 'cherry', label: 'Schwarzkirsche', className: 'absolute left-0 top-4 h-36 w-36' },
-    { type: 'raspberry', label: 'Himbeere', className: 'absolute left-28 top-20 h-28 w-28 opacity-95' },
+    {
+      src: '/images/ingredients/noir-top-fruits.png',
+      alt: 'Fotorealistische Schwarzkirschen und Himbeeren',
+      className: 'left-0 top-0 h-[19rem] w-[24rem]',
+      motionPath: 'left',
+      delay: 0.05,
+    },
   ];
   const topRightVisuals = [
-    { type: 'pepper', label: 'Rosa Pfeffer', className: 'absolute left-4 top-8 h-28 w-28' },
-    { type: 'bergamot', label: 'Bergamotte', className: 'absolute left-28 top-2 h-24 w-24 opacity-90' },
+    {
+      src: '/images/ingredients/noir-citrus-pepper.png',
+      alt: 'Fotorealistische Bergamotte und rosa Pfeffer',
+      className: 'right-0 top-0 h-[17rem] w-[24rem]',
+      motionPath: 'right',
+      delay: 0.25,
+    },
   ];
   const heartLeftVisuals = [
-    { type: 'rose', label: 'Schwarze Rose', className: 'absolute left-4 top-0 h-32 w-32' },
-    { type: 'plum', label: 'Pflaume', className: 'absolute left-28 top-24 h-28 w-28 opacity-95' },
-    { type: 'jasmine', label: 'Jasmin Sambac', className: 'absolute left-48 top-8 h-24 w-24 opacity-90' },
+    {
+      src: '/images/ingredients/noir-heart-florals.png',
+      alt: 'Fotorealistische schwarze Rose, Pflaume, Jasmin und Patchouli',
+      className: 'left-0 top-0 h-[20rem] w-[27rem]',
+      motionPath: 'lower',
+      delay: 0.45,
+    },
   ];
-  const heartRightVisuals = [
-    { type: 'patchouli', label: 'Gereinigtes Patchouli Herz', className: 'absolute left-6 top-10 h-32 w-32 opacity-95' },
-  ];
+  const heartRightVisuals = [];
   const baseLeftVisuals = [
-    { type: 'ebony', label: 'Schwarzes Ebenholz', className: 'absolute left-0 top-2 h-32 w-32' },
-    { type: 'vanilla', label: 'Vanille-Absolue', className: 'absolute left-24 top-20 h-28 w-28 opacity-95' },
-    { type: 'amber', label: 'Ambra', className: 'absolute left-48 top-4 h-28 w-28 opacity-90' },
+    {
+      src: '/images/ingredients/noir-base-woods.png',
+      alt: 'Fotorealistisches Ebenholz, Vanille, Ambra, Moschus und Rauchharz',
+      className: 'left-0 top-0 h-[19rem] w-[28rem]',
+      motionPath: 'lower',
+      delay: 0.8,
+    },
   ];
-  const baseRightVisuals = [
-    { type: 'musk', label: 'Moschus', className: 'absolute left-6 top-2 h-28 w-28 opacity-90' },
-    { type: 'smoke', label: 'Rauchharz', className: 'absolute left-32 top-12 h-32 w-32 opacity-95' },
-  ];
+  const baseRightVisuals = [];
 
   return (
     <section
@@ -500,6 +288,14 @@ export default function ScentMotionScene({
               aria-label={`${productName}: Duftnoten bewegen sich zur fertigen Duftsignatur.`}
             >
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(123,31,43,0.46)_0%,rgba(61,20,22,0.28)_30%,transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.1),transparent_30%,rgba(0,0,0,0.34)_100%)]" />
+              {!shouldReduceMotion && (
+                <motion.div
+                  className="absolute -inset-y-24 left-[-34%] z-40 w-[34%] rotate-12 bg-[linear-gradient(90deg,transparent,rgba(255,244,224,0.16),rgba(214,189,134,0.2),transparent)] blur-xl mix-blend-screen"
+                  animate={{ x: ['0%', '390%'] }}
+                  transition={{ duration: 9.5, ease: luxuryEase, repeat: Infinity, repeatDelay: 2.2 }}
+                  aria-hidden="true"
+                />
+              )}
               <div className="absolute inset-x-[8%] bottom-[13%] h-[24%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,235,210,0.34),rgba(123,31,43,0.18)_34%,transparent_70%)] blur-3xl" />
               <div className="absolute inset-x-[12%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-champagne/42 to-transparent" />
 
@@ -533,31 +329,37 @@ export default function ScentMotionScene({
                 className="left-[24%] top-[27%] z-20 h-56 w-80"
                 items={topLeftVisuals}
                 style={topLeftStyle}
+                shouldReduceMotion={shouldReduceMotion}
               />
               <IngredientCluster
                 className="right-[24%] top-[26%] z-20 h-48 w-72"
                 items={topRightVisuals}
                 style={topRightStyle}
+                shouldReduceMotion={shouldReduceMotion}
               />
               <IngredientCluster
                 className="left-[22%] top-[52%] z-20 h-56 w-96"
                 items={heartLeftVisuals}
                 style={heartLeftStyle}
+                shouldReduceMotion={shouldReduceMotion}
               />
               <IngredientCluster
                 className="right-[26%] top-[52%] z-20 h-48 w-64"
                 items={heartRightVisuals}
                 style={heartRightStyle}
+                shouldReduceMotion={shouldReduceMotion}
               />
               <IngredientCluster
                 className="left-[22%] bottom-[18%] z-20 h-52 w-[26rem]"
                 items={baseLeftVisuals}
                 style={baseLeftStyle}
+                shouldReduceMotion={shouldReduceMotion}
               />
               <IngredientCluster
                 className="right-[24%] bottom-[19%] z-20 h-52 w-72"
                 items={baseRightVisuals}
                 style={baseRightStyle}
+                shouldReduceMotion={shouldReduceMotion}
               />
 
               <motion.div
@@ -665,13 +467,31 @@ export default function ScentMotionScene({
             </div>
 
             <div className="mx-auto mt-12 grid max-w-3xl gap-10 lg:hidden">
-              <MobilePhase label="Kopfnote" notes={topNotes} visuals={[...topLeftVisuals, ...topRightVisuals]} delay={0.02}>
+              <MobilePhase
+                label="Kopfnote"
+                notes={topNotes}
+                visuals={[...topLeftVisuals, ...topRightVisuals]}
+                delay={0.02}
+                shouldReduceMotion={shouldReduceMotion}
+              >
                 Schwarzkirsche und Himbeere ziehen mit rotem Licht zur Mitte; rosa Pfeffer prickelt fein, Bergamotte bleibt ein kurzer heller Reflex.
               </MobilePhase>
-              <MobilePhase label="Herznote" notes={heartNotes} visuals={[...heartLeftVisuals, ...heartRightVisuals]} delay={0.04}>
+              <MobilePhase
+                label="Herznote"
+                notes={heartNotes}
+                visuals={[...heartLeftVisuals, ...heartRightVisuals]}
+                delay={0.04}
+                shouldReduceMotion={shouldReduceMotion}
+              >
                 Schwarze Rose, Pflaume und Jasmin öffnen die florale Tiefe. Patchouli legt eine dunkle, ruhige Welle darunter.
               </MobilePhase>
-              <MobilePhase label="Basisnote" notes={baseNotes} visuals={[...baseLeftVisuals, ...baseRightVisuals]} delay={0.06}>
+              <MobilePhase
+                label="Basisnote"
+                notes={baseNotes}
+                visuals={[...baseLeftVisuals, ...baseRightVisuals]}
+                delay={0.06}
+                shouldReduceMotion={shouldReduceMotion}
+              >
                 Ebenholz, Vanille, Ambra, Moschus und Rauchharz verdichten sich zur warmen Spur um den Flakon.
               </MobilePhase>
             </div>
