@@ -60,7 +60,15 @@ function DetailAtmosphere({ product, type }) {
       <div className="absolute inset-x-[16%] bottom-[18%] h-[22%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(65,44,24,0.13),transparent_66%)] blur-2xl" />
       <div className="absolute left-[24%] top-[12%] h-[70%] w-px rotate-12 bg-gradient-to-b from-transparent via-gold/44 to-transparent blur-[1px]" />
       <div className="absolute right-[22%] top-[18%] h-[60%] w-px -rotate-12 bg-gradient-to-b from-transparent via-charcoal/18 to-transparent blur-[1px]" />
-      <div className="absolute bottom-8 left-8">
+      <div className="absolute inset-y-[8%] right-[5%] w-[58%] min-w-[18rem]">
+        <DtcProductScene
+          product={product}
+          className="h-full rounded-[2rem] bg-transparent shadow-none"
+          imageClassName={type === 'packaging' ? 'scale-[1.02]' : 'scale-[1.16]'}
+        />
+      </div>
+      <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-pearl/92 via-pearl/70 to-transparent" />
+      <div className="absolute bottom-8 left-8 max-w-[21rem]">
         <p className="eyebrow mb-3">{label}</p>
         <p className="max-w-xs font-serif text-4xl leading-tight text-charcoal">
           {type === 'packaging' ? 'Reduziert verpackt. Bereit zum Verschenken.' : 'Eine Signatur, die nahe bleibt.'}
@@ -92,7 +100,7 @@ function ProductGallery({ product }) {
             {key === 'main' || key === 'detail' ? (
               <DtcProductScene product={product} className="absolute inset-0 rounded-[1.1rem]" imageClassName="scale-[1.2]" />
             ) : (
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_24%,rgba(214,189,134,0.28),transparent_7rem),linear-gradient(145deg,#fffdf8,#f1e6d5)]" />
+              <DtcProductScene product={product} className="absolute inset-0 rounded-[1.1rem]" imageClassName="scale-[1.32]" />
             )}
           </GalleryTile>
         ))}

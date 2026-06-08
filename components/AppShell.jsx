@@ -13,6 +13,7 @@ export default function AppShell({ children }) {
   const pathname = usePathname();
   const normalizedPathname = pathname !== '/' ? pathname.replace(/\/$/, '') : pathname;
   const isDtcExperience =
+    normalizedPathname === '/' ||
     normalizedPathname === '/neu' ||
     normalizedPathname === '/kollektion' ||
     normalizedPathname === '/ueber-uns' ||

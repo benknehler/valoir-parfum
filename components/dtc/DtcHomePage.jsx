@@ -108,6 +108,41 @@ function ServiceSection() {
   );
 }
 
+function CampaignVideoSection() {
+  return (
+    <section className="relative overflow-hidden py-24 sm:py-32 lg:py-40">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_18%,rgba(123,31,43,0.1),transparent_28rem),radial-gradient(circle_at_82%_28%,rgba(214,189,134,0.34),transparent_30rem),linear-gradient(180deg,#fbf7ef,#fffdf8)]" />
+      <div className="lux-container relative grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
+        <Reveal>
+          <p className="eyebrow mb-6">Valoir Film</p>
+          <h2 className="font-serif text-[clamp(3.5rem,7vw,7.6rem)] font-semibold leading-[0.9] text-charcoal">
+            Zwei Signaturen in Bewegung.
+          </h2>
+          <p className="mt-8 max-w-xl text-xl leading-9 text-charcoal/66">
+            Ein kurzer Kampagnenfilm verbindet rotes Glas, goldenes Licht und die stille Präsenz der beiden Valoir-Düfte.
+          </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <div className="relative overflow-hidden rounded-[2.6rem] border border-gold/14 bg-pearl/62 p-3 shadow-[0_34px_130px_rgba(68,46,24,0.14)]">
+            <video
+              className="aspect-video w-full rounded-[2.1rem] object-cover"
+              src="/videos/valoir-campaign.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              onCanPlay={(event) => event.currentTarget.play().catch(() => {})}
+              aria-label="Valoir Werbevideo mit Noir Cerice und Luna Solea"
+            />
+            <div className="pointer-events-none absolute inset-3 rounded-[2.1rem] bg-[linear-gradient(105deg,rgba(255,255,255,0.16),transparent_42%,rgba(214,189,134,0.16)_64%,transparent_82%)] mix-blend-screen" />
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function FaqSection() {
   return (
     <section className="py-20 sm:py-28">
@@ -147,85 +182,68 @@ export default function DtcHomePage() {
   const worldRef = useRef(null);
   const noir = products.find((product) => product.slug === 'noir-cerice');
   const luna = products.find((product) => product.slug === 'luna-solea');
-  const { scrollYProgress: heroProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
   const { scrollYProgress: worldProgress } = useScroll({
     target: worldRef,
     offset: ['start end', 'end start'],
   });
 
-  const noirHeroY = useTransform(heroProgress, [0, 1], [0, -86]);
-  const lunaHeroY = useTransform(heroProgress, [0, 1], [22, -132]);
-  const noirHeroRotate = useTransform(heroProgress, [0, 1], [-2.5, 2]);
-  const lunaHeroRotate = useTransform(heroProgress, [0, 1], [3, -1.6]);
   const worldNoirX = useTransform(worldProgress, [0, 1], [-28, 18]);
   const worldLunaX = useTransform(worldProgress, [0, 1], [32, -22]);
 
   return (
     <DtcLayout>
-      <section ref={heroRef} className="relative min-h-[100svh] overflow-hidden pt-32 sm:pt-36">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_6%,rgba(214,189,134,0.36),transparent_34rem),radial-gradient(circle_at_12%_72%,rgba(123,31,43,0.08),transparent_24rem),radial-gradient(circle_at_88%_68%,rgba(189,122,47,0.16),transparent_26rem),linear-gradient(180deg,#fffdf8_0%,#fbf7ef_58%,#f1e6d5_100%)]" />
-        <div className="absolute inset-x-[8%] bottom-[10%] h-[20vh] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(74,51,31,0.13),transparent_67%)] blur-3xl" />
-        <div className="absolute inset-x-[15%] bottom-[13%] h-px bg-gradient-to-r from-transparent via-charcoal/18 to-transparent" />
+      <section ref={heroRef} className="relative min-h-[100svh] overflow-hidden bg-ivory">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/videos/valoir-hero-scene.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onCanPlay={(event) => event.currentTarget.play().catch(() => {})}
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,253,248,0.72)_0%,rgba(255,253,248,0.34)_42%,rgba(255,253,248,0.04)_70%),linear-gradient(180deg,rgba(255,253,248,0.12),rgba(239,226,209,0.16))]" />
+        <div className="absolute inset-x-0 bottom-0 h-[24vh] bg-[radial-gradient(ellipse_at_center,rgba(255,253,248,0.64),transparent_70%)]" />
         <motion.div
-          className="absolute left-[4%] top-[22%] hidden h-36 w-36 rounded-full bg-champagne/20 blur-3xl lg:block"
-          animate={{ scale: [1, 1.14, 1], opacity: [0.4, 0.66, 0.4] }}
-          transition={{ duration: 7.5, repeat: Infinity, ease: luxuryEase }}
+          className="absolute bottom-[5%] right-[4%] hidden h-[44vh] w-[36vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(214,189,134,0.32),transparent_66%)] blur-3xl lg:block"
+          animate={{ scale: [1, 1.08, 1], opacity: [0.34, 0.58, 0.34] }}
+          transition={{ duration: 8.5, repeat: Infinity, ease: luxuryEase }}
         />
         <motion.div
-          className="absolute right-[5%] top-[18%] hidden h-44 w-44 rounded-full bg-amber/12 blur-3xl lg:block"
-          animate={{ scale: [1.1, 0.96, 1.1], opacity: [0.42, 0.7, 0.42] }}
-          transition={{ duration: 8.2, repeat: Infinity, ease: luxuryEase }}
+          className="absolute bottom-[3%] left-[-10%] hidden h-[30vh] w-[44vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(123,31,43,0.14),transparent_68%)] blur-3xl lg:block"
+          animate={{ x: [0, 28, 0], opacity: [0.3, 0.52, 0.3] }}
+          transition={{ duration: 9.5, repeat: Infinity, ease: luxuryEase }}
         />
 
-        <div className="lux-container relative grid min-h-[calc(100svh-8rem)] items-center gap-12 pb-20 lg:grid-cols-[0.82fr_1.18fr]">
+        <div className="lux-container relative flex min-h-[100svh] items-center pb-16 pt-28 lg:pt-36">
           <motion.div
-            className="relative z-10 max-w-2xl"
+            className="relative z-10 max-w-[46rem]"
             initial={{ opacity: 0, y: 46, filter: 'blur(24px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 1.18, ease: luxuryEase }}
           >
-            <p className="eyebrow mb-7">Valoir Parfum</p>
-            <h1 className="font-serif text-[clamp(5.7rem,17vw,15.5rem)] font-semibold leading-[0.75] tracking-normal text-charcoal">
+            <h1 className="font-serif text-[clamp(6.2rem,17vw,16rem)] font-semibold leading-[0.72] tracking-normal text-[#b6986f]">
               Valoir
             </h1>
-            <p className="mt-8 max-w-xl text-xl leading-9 text-charcoal/66 sm:text-2xl sm:leading-10">
+            <p className="mt-8 max-w-xl text-2xl leading-9 text-charcoal/66 sm:text-3xl sm:leading-[1.18]">
               Zwei Duftwelten. Eine unverwechselbare Präsenz.
             </p>
             <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-              <Link className="button-lux button-lux-primary" href="/kollektion">
+              <Link
+                className="group inline-flex min-h-[3.8rem] items-center justify-between gap-10 border border-[#b6986f]/42 bg-ivory/38 px-8 text-[0.72rem] font-semibold uppercase tracking-luxury text-[#9d825e] backdrop-blur-xl transition-all duration-500 ease-luxury hover:border-[#9d825e]/70 hover:bg-ivory/62"
+                href="/kollektion"
+              >
                 Kollektion entdecken
-              </Link>
-              <Link className="button-lux" href="#duftwelten">
-                Duftwelten erleben
+                <ArrowRight size={18} className="transition-transform duration-500 ease-luxury group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </div>
           </motion.div>
-
-          <div className="relative -mx-2 min-h-[28rem] sm:min-h-[39rem] lg:mx-0 lg:min-h-[42rem]">
-            <motion.div
-              className="absolute left-0 top-[5%] h-[25rem] w-[54%] max-w-[34rem] sm:h-[36rem] lg:left-[3%] lg:top-[9%] lg:h-[42rem]"
-              style={{ y: noirHeroY, rotate: noirHeroRotate }}
-              initial={{ opacity: 0, x: -34, filter: 'blur(18px)' }}
-              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 1.2, delay: 0.12, ease: luxuryEase }}
-            >
-              <DtcProductScene product={noir} priority className="h-full rounded-[3rem]" imageClassName="scale-[1.08]" />
-            </motion.div>
-            <motion.div
-              className="absolute right-0 top-0 h-[26rem] w-[56%] max-w-[36rem] sm:h-[38rem] lg:right-[2%] lg:top-[2%] lg:h-[44rem]"
-              style={{ y: lunaHeroY, rotate: lunaHeroRotate }}
-              initial={{ opacity: 0, x: 34, filter: 'blur(18px)' }}
-              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 1.2, delay: 0.22, ease: luxuryEase }}
-            >
-              <DtcProductScene product={luna} priority className="h-full rounded-[3rem]" imageClassName="scale-[1.08]" />
-            </motion.div>
-          </div>
         </div>
       </section>
+
+      <CampaignVideoSection />
 
       <section id="duftwelten" ref={worldRef} className="relative overflow-hidden py-24 sm:py-36 lg:py-44">
         <div className="absolute inset-0 bg-[linear-gradient(180deg,#f1e6d5_0%,#fffdf8_48%,#fbf7ef_100%)]" />

@@ -1,5 +1,5 @@
-import HomePage from '../components/HomePage.jsx';
+import DtcHomePage from '../components/dtc/DtcHomePage.jsx';
 
 export default function Page() {
-  return <HomePage />;
+  return <DtcHomePage />;
 }
