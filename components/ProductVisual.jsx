@@ -52,6 +52,7 @@ export default function ProductVisual({
           src={product.image}
           alt={product.imageAlt}
           fill
+          preload={priority}
           loading={priority ? 'eager' : 'lazy'}
           fetchPriority={priority ? 'high' : 'auto'}
           sizes="(min-width: 1024px) 52vw, 100vw"

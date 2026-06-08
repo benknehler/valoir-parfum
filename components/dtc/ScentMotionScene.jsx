@@ -7,7 +7,7 @@ import { luxuryEase } from '../../lib/motion.js';
 
 function PhaseLabel({ children }) {
   return (
-    <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-luxury text-champagne/72">
+    <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-luxury text-champagne/78">
       {children}
     </p>
   );
@@ -40,6 +40,7 @@ function PhotoIngredientLayer({
   alt,
   className = '',
   shouldReduceMotion = false,
+  isSolar = false,
   motionPath = 'left',
   delay = 0,
 }) {
@@ -71,7 +72,13 @@ function PhotoIngredientLayer({
             }
       }
     >
-      <div className="absolute inset-[14%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,241,224,0.32),rgba(123,31,43,0.14)_42%,transparent_72%)] blur-2xl" />
+      <div
+        className={`absolute inset-[14%] rounded-full blur-2xl ${
+          isSolar
+            ? 'bg-[radial-gradient(ellipse_at_center,rgba(255,246,222,0.36),rgba(255,177,84,0.18)_42%,transparent_72%)]'
+            : 'bg-[radial-gradient(ellipse_at_center,rgba(255,241,224,0.32),rgba(123,31,43,0.14)_42%,transparent_72%)]'
+        }`}
+      />
       <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(105deg,rgba(255,255,255,0.12),transparent_34%,rgba(214,189,134,0.14)_62%,transparent_78%)] mix-blend-screen" />
       <Image
         src={src}
@@ -84,25 +91,31 @@ function PhotoIngredientLayer({
   );
 }
 
-function IngredientCluster({ items, className = '', style, shouldReduceMotion = false }) {
+function IngredientCluster({ items, className = '', style, shouldReduceMotion = false, isSolar = false }) {
   return (
     <motion.div className={`pointer-events-none absolute hidden lg:block ${className}`} style={style} aria-hidden="true">
       {items.map((item) => (
-        <PhotoIngredientLayer key={item.src} {...item} shouldReduceMotion={shouldReduceMotion} />
+        <PhotoIngredientLayer key={item.src} {...item} shouldReduceMotion={shouldReduceMotion} isSolar={isSolar} />
       ))}
     </motion.div>
   );
 }
 
-function MobileVisualRow({ items, shouldReduceMotion = false }) {
+function MobileVisualRow({ items, shouldReduceMotion = false, isSolar = false }) {
   return (
-    <div className="grid grid-cols-2 gap-4" aria-hidden="true">
+    <div className={`grid gap-4 ${items.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`} aria-hidden="true">
       {items.map((item) => (
-        <div key={item.src} className="relative h-28 overflow-hidden rounded-[1.3rem] bg-[#1a0d0e]/60">
+        <div
+          key={item.src}
+          className={`relative h-28 overflow-hidden rounded-[1.3rem] ${
+            isSolar ? 'bg-[#4b260e]/58' : 'bg-[#1a0d0e]/60'
+          }`}
+        >
           <PhotoIngredientLayer
             {...item}
             className="inset-0 h-full w-full"
             shouldReduceMotion={shouldReduceMotion}
+            isSolar={isSolar}
           />
         </div>
       ))}
@@ -110,7 +123,7 @@ function MobileVisualRow({ items, shouldReduceMotion = false }) {
   );
 }
 
-function MobilePhase({ label, notes, visuals = [], children, delay = 0, shouldReduceMotion = false }) {
+function MobilePhase({ label, notes, visuals = [], children, delay = 0, shouldReduceMotion = false, isSolar = false }) {
   return (
     <motion.div
       className="grid gap-5 border-t border-champagne/18 pt-8"
@@ -120,7 +133,7 @@ function MobilePhase({ label, notes, visuals = [], children, delay = 0, shouldRe
       transition={{ duration: 0.9, delay, ease: luxuryEase }}
     >
       <PhaseLabel>{label}</PhaseLabel>
-      <MobileVisualRow items={visuals} shouldReduceMotion={shouldReduceMotion} />
+      <MobileVisualRow items={visuals} shouldReduceMotion={shouldReduceMotion} isSolar={isSolar} />
       <p className="max-w-xl text-base leading-8 text-ivory/68">{children}</p>
       <div className="grid gap-3">
         {notes.map((note) => (
@@ -141,6 +154,8 @@ export default function ScentMotionScene({
   visualTheme = [],
 }) {
   const sceneRef = useRef(null);
+  const isSolar = tone === 'golden-solea' || product?.world === 'solar';
+  const titleId = `scent-motion-${product?.slug || productName.toLowerCase().replace(/\s+/g, '-')}`;
   const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sceneRef,
@@ -215,53 +230,126 @@ export default function ScentMotionScene({
   const topNotes = notes?.Kopfnote || [];
   const heartNotes = notes?.Herznote || [];
   const baseNotes = notes?.Basisnote || [];
-  const [themePrimary = 'bordeaux'] = visualTheme;
-  const topLeftVisuals = [
-    {
-      src: '/images/ingredients/noir-top-fruits.png',
-      alt: 'Fotorealistische Schwarzkirschen und Himbeeren',
-      className: 'left-0 top-0 h-[19rem] w-[24rem]',
-      motionPath: 'left',
-      delay: 0.05,
-    },
-  ];
-  const topRightVisuals = [
-    {
-      src: '/images/ingredients/noir-citrus-pepper.png',
-      alt: 'Fotorealistische Bergamotte und rosa Pfeffer',
-      className: 'right-0 top-0 h-[17rem] w-[24rem]',
-      motionPath: 'right',
-      delay: 0.25,
-    },
-  ];
-  const heartLeftVisuals = [
-    {
-      src: '/images/ingredients/noir-heart-florals.png',
-      alt: 'Fotorealistische schwarze Rose, Pflaume, Jasmin und Patchouli',
-      className: 'left-0 top-0 h-[20rem] w-[27rem]',
-      motionPath: 'lower',
-      delay: 0.45,
-    },
-  ];
+  const [themePrimary = isSolar ? 'goldene waerme' : 'bordeaux'] = visualTheme;
+  const topLeftVisuals = isSolar
+    ? [
+        {
+          src: '/images/ingredients/luna-top-fruits.png',
+          alt: 'Fotorealistische Pfirsiche, Mango, Blutorange, Bergamotte und rosa Pfeffer',
+          className: 'left-0 top-0 h-[20rem] w-[28rem]',
+          motionPath: 'left',
+          delay: 0.05,
+        },
+      ]
+    : [
+        {
+          src: '/images/ingredients/noir-top-fruits.png',
+          alt: 'Fotorealistische Schwarzkirschen und Himbeeren',
+          className: 'left-0 top-0 h-[19rem] w-[24rem]',
+          motionPath: 'left',
+          delay: 0.05,
+        },
+      ];
+  const topRightVisuals = isSolar
+    ? []
+    : [
+        {
+          src: '/images/ingredients/noir-citrus-pepper.png',
+          alt: 'Fotorealistische Bergamotte und rosa Pfeffer',
+          className: 'right-0 top-0 h-[17rem] w-[24rem]',
+          motionPath: 'right',
+          delay: 0.25,
+        },
+      ];
+  const heartLeftVisuals = isSolar
+    ? [
+        {
+          src: '/images/ingredients/luna-heart-florals.png',
+          alt: 'Fotorealistische Jasminblueten, Osmanthus, Iris, Heliotrop, Zimt, Amberwood und Patchouli',
+          className: 'left-0 top-0 h-[21rem] w-[30rem]',
+          motionPath: 'lower',
+          delay: 0.45,
+        },
+      ]
+    : [
+        {
+          src: '/images/ingredients/noir-heart-florals.png',
+          alt: 'Fotorealistische schwarze Rose, Pflaume, Jasmin und Patchouli',
+          className: 'left-0 top-0 h-[20rem] w-[27rem]',
+          motionPath: 'lower',
+          delay: 0.45,
+        },
+      ];
   const heartRightVisuals = [];
-  const baseLeftVisuals = [
-    {
-      src: '/images/ingredients/noir-base-woods.png',
-      alt: 'Fotorealistisches Ebenholz, Vanille, Ambra, Moschus und Rauchharz',
-      className: 'left-0 top-0 h-[19rem] w-[28rem]',
-      motionPath: 'lower',
-      delay: 0.8,
-    },
-  ];
+  const baseLeftVisuals = isSolar
+    ? [
+        {
+          src: '/images/ingredients/luna-base-woods.png',
+          alt: 'Fotorealistische Vanille, Tonka, Zedernholz, Ambra, Moschus und Guajakholz',
+          className: 'left-0 top-0 h-[19rem] w-[28rem]',
+          motionPath: 'lower',
+          delay: 0.8,
+        },
+      ]
+    : [
+        {
+          src: '/images/ingredients/noir-base-woods.png',
+          alt: 'Fotorealistisches Ebenholz, Vanille, Ambra, Moschus und Rauchharz',
+          className: 'left-0 top-0 h-[19rem] w-[28rem]',
+          motionPath: 'lower',
+          delay: 0.8,
+        },
+      ];
   const baseRightVisuals = [];
+  const mobileCopy = isSolar
+    ? {
+        top: 'Pfirsich, Mango und Blutorange leuchten warm auf; Bergamotte und rosa Pfeffer setzen einen hellen, funkelnden Akzent.',
+        heart: 'Jasmin, Osmanthus, Iris und Heliotrop entfalten sich weich. Zimt, Amberwood und Patchouli geben goldene Tiefe.',
+        base: 'Vanille, Tonka, Zedernholz, Ambra, Moschus und Guajakholz verdichten sich zu einer cremigen, warmen Aura.',
+      }
+    : {
+        top: 'Schwarzkirsche und Himbeere ziehen mit rotem Licht zur Mitte; rosa Pfeffer prickelt fein, Bergamotte bleibt ein kurzer heller Reflex.',
+        heart: 'Schwarze Rose, Pflaume und Jasmin öffnen die florale Tiefe. Patchouli legt eine dunkle, ruhige Welle darunter.',
+        base: 'Ebenholz, Vanille, Ambra, Moschus und Rauchharz verdichten sich zur warmen Spur um den Flakon.',
+      };
+  const bgClass = isSolar
+    ? 'bg-[radial-gradient(circle_at_50%_24%,rgba(214,189,134,0.54),transparent_29rem),radial-gradient(circle_at_24%_56%,rgba(255,180,86,0.28),transparent_30rem),radial-gradient(circle_at_78%_48%,rgba(255,244,214,0.22),transparent_24rem),linear-gradient(180deg,#2a160c_0%,#7d4217_48%,#1d120c_100%)]'
+    : 'bg-[radial-gradient(circle_at_50%_24%,rgba(123,31,43,0.36),transparent_28rem),radial-gradient(circle_at_24%_56%,rgba(121,20,34,0.24),transparent_30rem),radial-gradient(circle_at_78%_48%,rgba(185,151,91,0.18),transparent_24rem),linear-gradient(180deg,#16120f_0%,#241113_48%,#120d0b_100%)]';
+  const cardClass = isSolar
+    ? 'bg-[#2b160b]/42'
+    : 'bg-[#160c0d]/58';
+  const cardAuraClass = isSolar
+    ? 'bg-[radial-gradient(ellipse_at_center,rgba(255,212,130,0.52)_0%,rgba(189,122,47,0.28)_30%,transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.16),transparent_30%,rgba(72,36,14,0.28)_100%)]'
+    : 'bg-[radial-gradient(ellipse_at_center,rgba(123,31,43,0.46)_0%,rgba(61,20,22,0.28)_30%,transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.1),transparent_30%,rgba(0,0,0,0.34)_100%)]';
+  const coreAuraClass = isSolar
+    ? 'bg-[radial-gradient(circle_at_center,rgba(255,246,222,0.36),rgba(255,178,82,0.28)_30%,rgba(214,189,134,0.16)_52%,transparent_72%)]'
+    : 'bg-[radial-gradient(circle_at_center,rgba(255,241,224,0.28),rgba(154,24,42,0.24)_30%,rgba(185,151,91,0.12)_52%,transparent_72%)]';
+  const coreRingClass = isSolar
+    ? 'bg-[radial-gradient(circle_at_52%_42%,rgba(255,253,248,0.2),rgba(255,178,82,0.26)_38%,rgba(84,42,12,0.08)_68%)]'
+    : 'bg-[radial-gradient(circle_at_52%_42%,rgba(255,253,248,0.16),rgba(123,31,43,0.28)_38%,rgba(22,18,15,0.08)_68%)]';
+  const floorGlowClass = isSolar
+    ? 'bg-[radial-gradient(ellipse_at_center,rgba(255,228,178,0.36),rgba(255,177,84,0.2)_34%,transparent_70%)]'
+    : 'bg-[radial-gradient(ellipse_at_center,rgba(255,235,210,0.34),rgba(123,31,43,0.18)_34%,transparent_70%)]';
+  const topLeftBloomClass = isSolar
+    ? 'bg-[radial-gradient(ellipse_at_center,rgba(255,180,86,0.5),rgba(214,189,134,0.16)_38%,transparent_70%)]'
+    : 'bg-[radial-gradient(ellipse_at_center,rgba(154,24,42,0.52),rgba(123,31,43,0.16)_38%,transparent_70%)]';
+  const topRightBloomClass = isSolar
+    ? 'bg-[radial-gradient(ellipse_at_center,rgba(255,232,184,0.34),rgba(255,255,255,0.1)_38%,transparent_72%)]'
+    : 'bg-[radial-gradient(ellipse_at_center,rgba(121,20,34,0.38),rgba(255,255,255,0.08)_38%,transparent_72%)]';
+  const baseBloomClass = isSolar
+    ? 'bg-[radial-gradient(ellipse_at_center,rgba(255,210,130,0.25),rgba(106,58,22,0.3)_44%,transparent_72%)]'
+    : 'bg-[radial-gradient(ellipse_at_center,rgba(185,151,91,0.22),rgba(61,32,34,0.28)_44%,transparent_72%)]';
+  const smokeClass = isSolar
+    ? 'bg-[radial-gradient(ellipse_at_center,rgba(78,39,15,0.48),transparent_72%)]'
+    : 'bg-[radial-gradient(ellipse_at_center,rgba(42,22,20,0.68),transparent_72%)]';
 
   return (
     <section
       ref={sceneRef}
-      className={`relative isolate overflow-hidden bg-ink text-ivory ${tone === 'dark-cerise' ? '' : ''}`}
-      aria-labelledby="noir-cerice-motion-title"
+      className="relative isolate overflow-hidden bg-ink text-ivory"
+      aria-labelledby={titleId}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_24%,rgba(123,31,43,0.36),transparent_28rem),radial-gradient(circle_at_24%_56%,rgba(121,20,34,0.24),transparent_30rem),radial-gradient(circle_at_78%_48%,rgba(185,151,91,0.18),transparent_24rem),linear-gradient(180deg,#16120f_0%,#241113_48%,#120d0b_100%)]" />
+      <div className={`absolute inset-0 ${bgClass}`} />
       <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(110deg,transparent_0%,rgba(255,255,255,0.32)_46%,transparent_54%),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:100%_100%,82px_82px]" />
       <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-ivory/80 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-ivory/70 to-transparent" />
@@ -272,7 +360,7 @@ export default function ScentMotionScene({
             <motion.div className="mx-auto max-w-4xl text-center" style={headingStyle}>
               <p className="eyebrow mb-6 text-champagne/82">{productName}</p>
               <h2
-                id="noir-cerice-motion-title"
+                id={titleId}
                 className="font-serif text-[clamp(3.5rem,8vw,8.7rem)] font-semibold leading-[0.88] text-ivory"
               >
                 {headline}
@@ -283,11 +371,11 @@ export default function ScentMotionScene({
             </motion.div>
 
             <div
-              className="relative mx-auto mt-16 min-h-[45rem] max-w-[1320px] overflow-hidden rounded-[2.8rem] bg-[#160c0d]/58 sm:min-h-[52rem] lg:min-h-[min(760px,72svh)]"
+              className={`relative mx-auto mt-16 min-h-[45rem] max-w-[1320px] overflow-hidden rounded-[2.8rem] ${cardClass} sm:min-h-[52rem] lg:min-h-[min(760px,72svh)]`}
               role="img"
               aria-label={`${productName}: Duftnoten bewegen sich zur fertigen Duftsignatur.`}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(123,31,43,0.46)_0%,rgba(61,20,22,0.28)_30%,transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.1),transparent_30%,rgba(0,0,0,0.34)_100%)]" />
+              <div className={`absolute inset-0 ${cardAuraClass}`} />
               {!shouldReduceMotion && (
                 <motion.div
                   className="absolute -inset-y-24 left-[-34%] z-40 w-[34%] rotate-12 bg-[linear-gradient(90deg,transparent,rgba(255,244,224,0.16),rgba(214,189,134,0.2),transparent)] blur-xl mix-blend-screen"
@@ -296,16 +384,16 @@ export default function ScentMotionScene({
                   aria-hidden="true"
                 />
               )}
-              <div className="absolute inset-x-[8%] bottom-[13%] h-[24%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,235,210,0.34),rgba(123,31,43,0.18)_34%,transparent_70%)] blur-3xl" />
+              <div className={`absolute inset-x-[8%] bottom-[13%] h-[24%] rounded-full ${floorGlowClass} blur-3xl`} />
               <div className="absolute inset-x-[12%] bottom-[8%] h-px bg-gradient-to-r from-transparent via-champagne/42 to-transparent" />
 
               <motion.div
-                className="absolute left-[9%] top-[19%] hidden h-[18rem] w-[36rem] -rotate-6 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(154,24,42,0.52),rgba(123,31,43,0.16)_38%,transparent_70%)] blur-2xl lg:block"
+                className={`absolute left-[9%] top-[19%] hidden h-[18rem] w-[36rem] -rotate-6 rounded-full ${topLeftBloomClass} blur-2xl lg:block`}
                 style={topLeftStyle}
                 aria-hidden="true"
               />
               <motion.div
-                className="absolute right-[7%] top-[20%] hidden h-[16rem] w-[32rem] rotate-6 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(121,20,34,0.38),rgba(255,255,255,0.08)_38%,transparent_72%)] blur-2xl lg:block"
+                className={`absolute right-[7%] top-[20%] hidden h-[16rem] w-[32rem] rotate-6 rounded-full ${topRightBloomClass} blur-2xl lg:block`}
                 style={topRightStyle}
                 aria-hidden="true"
               />
@@ -315,12 +403,12 @@ export default function ScentMotionScene({
                 aria-hidden="true"
               />
               <motion.div
-                className="absolute left-[20%] bottom-[20%] h-[19rem] w-[60%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(185,151,91,0.22),rgba(61,32,34,0.28)_44%,transparent_72%)] blur-2xl"
+                className={`absolute left-[20%] bottom-[20%] h-[19rem] w-[60%] rounded-full ${baseBloomClass} blur-2xl`}
                 style={baseLeftStyle}
                 aria-hidden="true"
               />
               <motion.div
-                className="absolute inset-x-[12%] bottom-[11%] h-[21rem] bg-[radial-gradient(ellipse_at_center,rgba(42,22,20,0.68),transparent_72%)] blur-3xl"
+                className={`absolute inset-x-[12%] bottom-[11%] h-[21rem] ${smokeClass} blur-3xl`}
                 style={smokeStyle}
                 aria-hidden="true"
               />
@@ -330,36 +418,42 @@ export default function ScentMotionScene({
                 items={topLeftVisuals}
                 style={topLeftStyle}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               />
               <IngredientCluster
                 className="right-[24%] top-[26%] z-20 h-48 w-72"
                 items={topRightVisuals}
                 style={topRightStyle}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               />
               <IngredientCluster
                 className="left-[22%] top-[52%] z-20 h-56 w-96"
                 items={heartLeftVisuals}
                 style={heartLeftStyle}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               />
               <IngredientCluster
                 className="right-[26%] top-[52%] z-20 h-48 w-64"
                 items={heartRightVisuals}
                 style={heartRightStyle}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               />
               <IngredientCluster
                 className="left-[22%] bottom-[18%] z-20 h-52 w-[26rem]"
                 items={baseLeftVisuals}
                 style={baseLeftStyle}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               />
               <IngredientCluster
                 className="right-[24%] bottom-[19%] z-20 h-52 w-72"
                 items={baseRightVisuals}
                 style={baseRightStyle}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               />
 
               <motion.div
@@ -400,12 +494,12 @@ export default function ScentMotionScene({
               </motion.div>
 
               <motion.div
-                className="absolute left-1/2 top-[47%] h-[23rem] w-[23rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,241,224,0.28),rgba(154,24,42,0.24)_30%,rgba(185,151,91,0.12)_52%,transparent_72%)] blur-2xl"
+                className={`absolute left-1/2 top-[47%] h-[23rem] w-[23rem] -translate-x-1/2 -translate-y-1/2 rounded-full ${coreAuraClass} blur-2xl`}
                 style={auraStyle}
                 aria-hidden="true"
               />
               <motion.div
-                className="absolute left-1/2 top-[48%] h-[18rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-champagne/24 bg-[radial-gradient(circle_at_52%_42%,rgba(255,253,248,0.16),rgba(123,31,43,0.28)_38%,rgba(22,18,15,0.08)_68%)]"
+                className={`absolute left-1/2 top-[48%] h-[18rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-champagne/24 ${coreRingClass}`}
                 style={coreStyle}
                 aria-hidden="true"
               />
@@ -435,7 +529,7 @@ export default function ScentMotionScene({
                 className="absolute inset-x-0 bottom-[12%] z-30 mx-auto h-[30rem] w-[min(20rem,58vw)] sm:h-[34rem] sm:w-[22rem] lg:h-[38rem] lg:w-[24rem]"
                 style={bottleStyle}
               >
-                <div className="absolute inset-x-[8%] bottom-0 h-[8rem] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,232,210,0.22),rgba(123,31,43,0.22)_34%,transparent_68%)] blur-2xl" />
+                <div className={`absolute inset-x-[8%] bottom-0 h-[8rem] rounded-full ${floorGlowClass} blur-2xl`} />
                 <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(104deg,rgba(255,255,255,0.16),transparent_28%,transparent_68%,rgba(255,255,255,0.1))] mix-blend-screen" />
                 <div className="absolute inset-0 overflow-hidden [mask-image:radial-gradient(ellipse_at_center,black_36%,rgba(0,0,0,0.9)_58%,transparent_82%)]">
                   <Image
@@ -473,8 +567,9 @@ export default function ScentMotionScene({
                 visuals={[...topLeftVisuals, ...topRightVisuals]}
                 delay={0.02}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               >
-                Schwarzkirsche und Himbeere ziehen mit rotem Licht zur Mitte; rosa Pfeffer prickelt fein, Bergamotte bleibt ein kurzer heller Reflex.
+                {mobileCopy.top}
               </MobilePhase>
               <MobilePhase
                 label="Herznote"
@@ -482,8 +577,9 @@ export default function ScentMotionScene({
                 visuals={[...heartLeftVisuals, ...heartRightVisuals]}
                 delay={0.04}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               >
-                Schwarze Rose, Pflaume und Jasmin öffnen die florale Tiefe. Patchouli legt eine dunkle, ruhige Welle darunter.
+                {mobileCopy.heart}
               </MobilePhase>
               <MobilePhase
                 label="Basisnote"
@@ -491,8 +587,9 @@ export default function ScentMotionScene({
                 visuals={[...baseLeftVisuals, ...baseRightVisuals]}
                 delay={0.06}
                 shouldReduceMotion={shouldReduceMotion}
+                isSolar={isSolar}
               >
-                Ebenholz, Vanille, Ambra, Moschus und Rauchharz verdichten sich zur warmen Spur um den Flakon.
+                {mobileCopy.base}
               </MobilePhase>
             </div>
           </div>

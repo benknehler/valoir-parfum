@@ -226,9 +226,28 @@ function ScentProfile({ profile }) {
   );
 }
 
+const scentMotionContent = {
+  'noir-cerice': {
+    productName: 'Noir Cerice',
+    tone: 'dark-cerise',
+    headline: 'Die Komposition von Noir Cerice',
+    subline:
+      'Schwarzkirsche, schwarze Rose und rauchige Ambra vereinen sich zu einer tiefen, samtigen Duftsignatur.',
+    visualTheme: ['bordeaux', 'black cherry', 'smoked amber', 'velvet', 'dark rose'],
+  },
+  'luna-solea': {
+    productName: 'Luna Solea',
+    tone: 'golden-solea',
+    headline: 'Die Komposition von Luna Solea',
+    subline:
+      'Pfirsich, Mango, Osmanthus und cremige Ambra verschmelzen zu einer warmen, goldenen Aura.',
+    visualTheme: ['champagner', 'pfirsich', 'mango', 'vanille-ambra', 'goldenes licht'],
+  },
+};
+
 export default function DtcProductDetailPage({ product }) {
   const profile = dtcProfiles[product.slug];
-  const isNoirCerice = product.slug === 'noir-cerice';
+  const scentMotion = scentMotionContent[product.slug];
 
   return (
     <DtcLayout>
@@ -244,15 +263,11 @@ export default function DtcProductDetailPage({ product }) {
         </div>
       </section>
 
-      {isNoirCerice && (
+      {scentMotion && (
         <ScentMotionScene
           product={product}
-          productName="Noir Cerice"
-          tone="dark-cerise"
-          headline="Die Komposition von Noir Cerice"
-          subline="Schwarzkirsche, schwarze Rose und rauchige Ambra vereinen sich zu einer tiefen, samtigen Duftsignatur."
           notes={profile.notes}
-          visualTheme={['bordeaux', 'black cherry', 'smoked amber', 'velvet', 'dark rose']}
+          {...scentMotion}
         />
       )}
 
