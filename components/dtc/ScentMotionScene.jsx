@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { luxuryEase } from '../../lib/motion.js';
+import { assetPath } from '../../lib/assets.js';
 
 function NoteColumn({ title, notes }) {
   return (
@@ -35,7 +36,7 @@ export default function ScentMotionScene({
   const shouldReduceMotion = useReducedMotion();
   const isSolar = tone === 'golden-solea' || product?.world === 'solar';
   const titleId = `scent-motion-${product?.slug || productName.toLowerCase().replace(/\s+/g, '-')}`;
-  const videoSrc = isSolar ? '/videos/luna-composition.mp4' : '/videos/noir-composition.mp4';
+  const videoSrc = assetPath(isSolar ? '/videos/luna-composition.mp4' : '/videos/noir-composition.mp4');
   const topNotes = notes?.Kopfnote || [];
   const heartNotes = notes?.Herznote || [];
   const baseNotes = notes?.Basisnote || [];

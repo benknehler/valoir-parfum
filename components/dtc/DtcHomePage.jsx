@@ -8,6 +8,7 @@ import { dtcFaq, dtcProfiles, dtcServices } from '../../lib/dtcContent.js';
 import { subscribeNewsletter } from '../../lib/newsletter/subscribe.ts';
 import { luxuryEase } from '../../lib/motion.js';
 import { products } from '../../lib/products.js';
+import { assetPath } from '../../lib/assets.js';
 import DtcLayout from './DtcLayout.jsx';
 import DtcProductScene from './DtcProductScene.jsx';
 
@@ -126,7 +127,7 @@ function CampaignVideoSection() {
           <div className="relative overflow-hidden rounded-[2.6rem] border border-gold/14 bg-pearl/62 p-3 shadow-[0_34px_130px_rgba(68,46,24,0.14)]">
             <video
               className="aspect-video w-full rounded-[2.1rem] object-cover"
-              src="/videos/valoir-campaign.mp4"
+              src={assetPath('/videos/valoir-campaign.mp4')}
               autoPlay
               muted
               loop
@@ -195,7 +196,7 @@ export default function DtcHomePage() {
       <section ref={heroRef} className="relative min-h-[100svh] overflow-hidden bg-ivory">
         <video
           className="absolute inset-0 h-full w-full object-cover"
-          src="/videos/valoir-hero-scene.mp4"
+          src={assetPath('/videos/valoir-hero-scene.mp4')}
           autoPlay
           muted
           loop
